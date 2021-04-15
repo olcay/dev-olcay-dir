@@ -1,9 +1,16 @@
 ﻿<div class="p-4">
     <div class="container">
         <h1>Hi {{account.firstName}}!</h1>
-        <p>Your items:</p>
+        <p>{{bodyText}}</p>
+        <button (click)="openModal('custom-modal-1')">Update</button>
     </div>
 </div>
+
+<jw-modal id="custom-modal-1">
+    <h1>A Custom Modal!</h1>
+    <p>Home page text: <input type="text" [(ngModel)]="bodyText" /></p>
+    <button (click)="closeModal('custom-modal-1');">Close</button>
+</jw-modal>
 
 <div class="card text-center m-3">
     <h3 class="card-header">List</h3>

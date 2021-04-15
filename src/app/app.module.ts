@@ -1,12 +1,13 @@
 ﻿import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 // used to create fake backend
 import { fakeBackendProvider } from './_helpers';
 import { environment } from '@environments/environment';
 
+import { ModalModule } from './_modal';
 import { AppRoutingModule } from './app-routing.module';
 import { JwtInterceptor, ErrorInterceptor, appInitializer } from './_helpers';
 import { AccountService } from './_services';
@@ -19,6 +20,8 @@ import { API_BASE_URL, ItemDirApiClient } from './_services/itemdirapi.client';
     imports: [
         BrowserModule,
         ReactiveFormsModule,
+        FormsModule,
+        ModalModule,
         HttpClientModule,
         AppRoutingModule
     ],
@@ -35,7 +38,7 @@ import { API_BASE_URL, ItemDirApiClient } from './_services/itemdirapi.client';
         { provide: API_BASE_URL, useValue: environment.apiUrl},
         [ItemDirApiClient]
         // provider used to create fake backend
-        // fakeBackendProvider
+        //, fakeBackendProvider
     ],
     bootstrap: [AppComponent]
 })
