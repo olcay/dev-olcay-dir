@@ -2166,9 +2166,58 @@ export interface ILinkDto {
     method?: string | undefined;
 }
 
+export class PaginationDto implements IPaginationDto {
+    totalCount?: number;
+    pageSize?: number;
+    currentPage?: number;
+    totalPages?: number;
+
+    constructor(data?: IPaginationDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.totalCount = _data["totalCount"];
+            this.pageSize = _data["pageSize"];
+            this.currentPage = _data["currentPage"];
+            this.totalPages = _data["totalPages"];
+        }
+    }
+
+    static fromJS(data: any): PaginationDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginationDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        data["pageSize"] = this.pageSize;
+        data["currentPage"] = this.currentPage;
+        data["totalPages"] = this.totalPages;
+        return data; 
+    }
+}
+
+export interface IPaginationDto {
+    totalCount?: number;
+    pageSize?: number;
+    currentPage?: number;
+    totalPages?: number;
+}
+
 export class LinkedCollectionResourceDto implements ILinkedCollectionResourceDto {
     value?: { [key: string]: any; }[] | undefined;
     links?: LinkDto[] | undefined;
+    pagination?: PaginationDto;
 
     constructor(data?: ILinkedCollectionResourceDto) {
         if (data) {
@@ -2191,6 +2240,7 @@ export class LinkedCollectionResourceDto implements ILinkedCollectionResourceDto
                 for (let item of _data["links"])
                     this.links!.push(LinkDto.fromJS(item));
             }
+            this.pagination = _data["pagination"] ? PaginationDto.fromJS(_data["pagination"]) : <any>undefined;
         }
     }
 
@@ -2213,6 +2263,7 @@ export class LinkedCollectionResourceDto implements ILinkedCollectionResourceDto
             for (let item of this.links)
                 data["links"].push(item.toJSON());
         }
+        data["pagination"] = this.pagination ? this.pagination.toJSON() : <any>undefined;
         return data; 
     }
 }
@@ -2220,6 +2271,7 @@ export class LinkedCollectionResourceDto implements ILinkedCollectionResourceDto
 export interface ILinkedCollectionResourceDto {
     value?: { [key: string]: any; }[] | undefined;
     links?: LinkDto[] | undefined;
+    pagination?: PaginationDto;
 }
 
 export enum ItemType {

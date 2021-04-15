@@ -11,7 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { JwtInterceptor, ErrorInterceptor, appInitializer } from './_helpers';
 import { AccountService } from './_services';
 import { AppComponent } from './app.component';
-import { AlertComponent } from './_components';
+import { AlertComponent, JwPaginationComponent } from './_components';
 import { HomeComponent } from './home';
 import { API_BASE_URL, ItemDirApiClient } from './_services/itemdirapi.client';
 
@@ -25,6 +25,7 @@ import { API_BASE_URL, ItemDirApiClient } from './_services/itemdirapi.client';
     declarations: [
         AppComponent,
         AlertComponent,
+        JwPaginationComponent,
         HomeComponent
     ],
     providers: [

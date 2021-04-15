@@ -5,9 +5,17 @@
     </div>
 </div>
 
-<div *ngFor="let item of data" style="text-align:center">
-    <h3>
-        <a routerLink="/item/{{ item.id }}">{{ item.title }}</a>
-    </h3>
-    {{ item.description }}
+<div class="card text-center m-3">
+    <h3 class="card-header">List</h3>
+    <div class="card-body">
+        <div *ngFor="let item of pageOfItems">
+            <h3>
+                <a routerLink="/item/{{ item.id }}">{{ item.title }}</a>
+            </h3>
+            {{ item.description }}
+        </div>
+    </div>
+    <div class="card-footer pb-0 pt-3">
+        <jw-pagination [itemLength]="itemLength" (changePage)="onChangePage($event)"></jw-pagination>
+    </div>
 </div>
