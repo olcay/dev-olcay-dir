@@ -1,5 +1,33 @@
-# angular-10-signup-verification-boilerplate
+# dir.olcay.dev
 
-Angular 10 Boilerplate - Email Sign Up with Verification, Authentication & Forgot Password
+Angular 10
 
-For documentation and a live demo see https://jasonwatmore.com/post/2020/08/29/angular-10-boilerplate-email-sign-up-with-verification-authentication-forgot-password
+## Commands
+
+- Update clients: `npm run update`
+- Install dependencies: `npm i`
+- Start the app: `npm start`
+
+## Run the Angular App Locally
+
+1. Install NodeJS and NPM from <https://nodejs.org>
+
+1. Download or clone the tutorial project code.
+
+1. Install all required npm packages by running `npm install` from the command line in the project root folder (where the package.json is located).
+
+1. Start the api. For details about the api see <https://github.com/olcay/dev-olcay-dir-api>.
+
+1. Start the application by running `npm start` from the command line in the project root folder, this will launch a browser displaying the application.
+
+## References
+
+- [Angular 10 Boilerplate - Email Sign Up with Verification, Authentication & Forgot Password](https://jasonwatmore.com/post/2020/08/29/angular-10-boilerplate-email-sign-up-with-verification-authentication-forgot-password)
+
+## To Do
+
+- [x] Deploy to Github Pages
+- [x] Integrate Pets API using NSwag
+- [x] Add pagination component
+- [ ] Manage pets
+- [ ] Upload images

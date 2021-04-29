@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-import { ItemRoutingModule } from './item-routing.module';
+import { PetRoutingModule } from './pet-routing.module';
 import { LayoutComponent } from './layout.component';
 import { DetailsComponent } from './details.component';
 import { CreateComponent } from './create.component';
@@ -11,7 +11,7 @@ import { CreateComponent } from './create.component';
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        ItemRoutingModule
+        PetRoutingModule
     ],
     declarations: [
         LayoutComponent,
@@ -19,4 +19,4 @@ import { CreateComponent } from './create.component';
         CreateComponent
     ]
 })
-export class ItemModule { }
+export class PetModule { }

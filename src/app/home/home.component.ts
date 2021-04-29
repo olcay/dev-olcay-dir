@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit } from '@angular/core';
 
 import { AccountService } from '@app/_services';
-import { ItemDirApiClient } from '@app/_services/itemdirapi.client';
+import { FromWhere, Gender, PetAge, PetsApiClient, PetType, Size } from '@app/_services/petsapi.client';
 import { ModalService } from '../_modal';
 
 @Component({ templateUrl: 'home.component.html' })
@@ -14,12 +14,12 @@ export class HomeComponent implements OnInit {
 
     constructor(
         private accountService: AccountService,
-        private client: ItemDirApiClient,
+        private client: PetsApiClient,
         private modalService: ModalService) { }
 
     getData() {
         // get items for total count
-        this.client.getItems(undefined, undefined, 1, 0, undefined, undefined)
+        this.client.getPets(null, 0, 0, 0, null, null, PetType.Cat, 0, 0, PetAge.None, Gender.None, Size.None, FromWhere.None)
             .subscribe(res => {
                 this.itemLength = res.pagination.totalCount;
             }, error => console.error(error));
@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
     }
 
     onChangePage(pageNumber) {
-        this.client.getItems(undefined, undefined, pageNumber, 10, undefined, undefined)
+        this.client.getPets(null, 0, pageNumber, 10, null, null, PetType.Cat, 0, 0, PetAge.None, Gender.None, Size.None, FromWhere.None)
             .subscribe(res => {
                 this.pageOfItems = res.value;
             }, error => console.error(error));

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { AccountService, AlertService } from '@app/_services';
-import { ItemDirApiClient, ItemForCreationDto, TagForCreationDto } from '@app/_services/itemdirapi.client';
+import { PetsApiClient, PetForCreationDto } from '@app/_services/petsapi.client';
 export interface Tag {
     value: string;
     name: string;
@@ -14,36 +14,20 @@ export class CreateComponent implements OnInit {
     form: FormGroup;
     loading = false;
     submitted = false;
-    tagsData: Tag[] = [
-        { value: 'isPlayed', name: 'Is Played?' },
-        { value: 'isFinished', name: 'Is Finished?' }
-    ];
 
     constructor(
         private formBuilder: FormBuilder,
         private router: Router,
         private accountService: AccountService,
         private alertService: AlertService,
-        private client: ItemDirApiClient
+        private client: PetsApiClient
     ) { }
-
-    onChange(name: string, isChecked: boolean) {
-        const tags = (this.form.controls.tags as FormArray);
-
-        if (isChecked) {
-            tags.push(new FormControl(name));
-        } else {
-            const index = tags.controls.findIndex(x => x.value === name);
-            tags.removeAt(index);
-        }
-    }
 
     ngOnInit() {
         this.form = this.formBuilder.group({
             title: ['', Validators.required],
             description: [''],
-            itemType: ['Game', Validators.required],
-            tags: this.formBuilder.array([])
+            petType: ['Cat', Validators.required]
         });
     }
 
@@ -63,20 +47,16 @@ export class CreateComponent implements OnInit {
 
         this.loading = true;
 
-        var item = new ItemForCreationDto();
-        item.title = this.f.title.value;
-        item.description = this.f.description.value;
-        item.itemType = this.f.itemType.value;
-        item.tags = new Array();
+        var pet = new PetForCreationDto();
+        pet.title = this.f.title.value;
+        pet.description = this.f.description.value;
+        pet.petTypeValue = this.f.petType.value;
+        pet.cityId = 34;
+        pet.name = this.f.title.value;
+        pet.raceId = 42;
 
-        this.f.tags.value.forEach(element => {
-            var tag = new TagForCreationDto();
-            tag.name = element
-            item.tags.push(tag);
-        });  
-
-        this.client.createItem(item).subscribe(res => {
-            this.alertService.success('New item is created!', { keepAfterRouteChange: true });
+        this.client.createPet(pet).subscribe(res => {
+            this.alertService.success('New pet is created!', { keepAfterRouteChange: true });
             this.router.navigate(['/']);
         }, error => {
             this.alertService.error(error);

@@ -14,7 +14,7 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
-export interface IItemDirApiClient {
+export interface IPetsApiClient {
     /**
      * @param body (optional) 
      * @return Success
@@ -57,25 +57,49 @@ export interface IItemDirApiClient {
     /**
      * @return Success
      */
-    accountsAll(): Observable<AccountResponse[]>;
+    getAccounts(): Observable<AccountResponse[]>;
     /**
      * @param body (optional) 
      * @return Success
      */
-    accounts(body: CreateRequest | undefined): Observable<AccountResponse>;
+    createAccount(body: CreateRequest | undefined): Observable<AccountResponse>;
     /**
      * @return Success
      */
-    accounts2(id: number): Observable<AccountResponse>;
+    getAccountById(id: number): Observable<AccountResponse>;
     /**
      * @param body (optional) 
      * @return Success
      */
-    accounts3(id: number, body: UpdateRequest | undefined): Observable<AccountResponse>;
+    updateAccount(id: number, body: UpdateRequest | undefined): Observable<AccountResponse>;
     /**
      * @return Success
      */
-    accounts4(id: number): Observable<void>;
+    deleteAccount(id: number): Observable<void>;
+    /**
+     * @return Success
+     */
+    getPetTypes(): Observable<EnumDto[]>;
+    /**
+     * @return Success
+     */
+    getGenders(): Observable<EnumDto[]>;
+    /**
+     * @return Success
+     */
+    getAges(): Observable<EnumDto[]>;
+    /**
+     * @return Success
+     */
+    getSizes(): Observable<EnumDto[]>;
+    /**
+     * @return Success
+     */
+    getFromWhere(): Observable<EnumDto[]>;
+    /**
+     * @return Success
+     */
+    getCities(): Observable<EnumDto[]>;
     /**
      * @param searchQuery (optional) 
      * @param createdById (optional) 
@@ -83,9 +107,16 @@ export interface IItemDirApiClient {
      * @param pageSize (optional) 
      * @param orderBy (optional) 
      * @param fields (optional) 
+     * @param petType (optional) 
+     * @param cityId (optional) 
+     * @param raceId (optional) 
+     * @param age (optional) 
+     * @param gender (optional) 
+     * @param size (optional) 
+     * @param fromWhere (optional) 
      * @return Success
      */
-    getItems(searchQuery: string | null | undefined, createdById: number | undefined, pageNumber: number | undefined, pageSize: number | undefined, orderBy: string | null | undefined, fields: string | null | undefined): Observable<LinkedCollectionResourceDto>;
+    getPets(searchQuery: string | null | undefined, createdById: number | undefined, pageNumber: number | undefined, pageSize: number | undefined, orderBy: string | null | undefined, fields: string | null | undefined, petType: PetType | undefined, cityId: number | undefined, raceId: number | undefined, age: PetAge | undefined, gender: Gender | undefined, size: Size | undefined, fromWhere: FromWhere | undefined): Observable<CollectionResourceDto>;
     /**
      * @param searchQuery (optional) 
      * @param createdById (optional) 
@@ -93,54 +124,55 @@ export interface IItemDirApiClient {
      * @param pageSize (optional) 
      * @param orderBy (optional) 
      * @param fields (optional) 
+     * @param petType (optional) 
+     * @param cityId (optional) 
+     * @param raceId (optional) 
+     * @param age (optional) 
+     * @param gender (optional) 
+     * @param size (optional) 
+     * @param fromWhere (optional) 
      * @return Success
      */
-    items(searchQuery: string | null | undefined, createdById: number | undefined, pageNumber: number | undefined, pageSize: number | undefined, orderBy: string | null | undefined, fields: string | null | undefined): Observable<LinkedCollectionResourceDto>;
+    pets(searchQuery: string | null | undefined, createdById: number | undefined, pageNumber: number | undefined, pageSize: number | undefined, orderBy: string | null | undefined, fields: string | null | undefined, petType: PetType | undefined, cityId: number | undefined, raceId: number | undefined, age: PetAge | undefined, gender: Gender | undefined, size: Size | undefined, fromWhere: FromWhere | undefined): Observable<CollectionResourceDto>;
     /**
      * @param body (optional) 
      * @return Success
      */
-    createItem(body: ItemForCreationDto | undefined): Observable<ItemDto>;
+    createPet(body: PetForCreationDto | undefined): Observable<PetFullDto>;
     /**
      * @return Success
      */
-    items2(): Observable<void>;
-    /**
-     * @param fields (optional) 
-     * @param accept (optional) 
-     * @return Success
-     */
-    getItem(itemId: string, fields: string | null | undefined, accept: string | null | undefined): Observable<{ [key: string]: any; }>;
+    getPetsOptions(): Observable<void>;
     /**
      * @return Success
      */
-    deleteItem(itemId: string): Observable<void>;
+    getPet(petId: string): Observable<PetFullDto>;
     /**
      * @param body (optional) 
      * @return Success
      */
-    items3(itemId: string, body: Operation[] | null | undefined): Observable<void>;
-    /**
-     * @return Success
-     */
-    getRoot(): Observable<void>;
-    /**
-     * @return Success
-     */
-    getTagsForItem(itemId: string): Observable<TagDto[]>;
+    updatePet(petId: string, body: PetForUpdateDto | undefined): Observable<void>;
     /**
      * @param body (optional) 
      * @return Success
      */
-    createTagForItem(itemId: string, body: TagForCreationDto | undefined): Observable<TagDto>;
+    partiallyUpdatePet(petId: string, body: Operation[] | null | undefined): Observable<void>;
     /**
      * @return Success
      */
-    tags(itemId: string, tagId: string): Observable<void>;
+    deletePet(petId: string): Observable<void>;
+    /**
+     * @return Success
+     */
+    publishPet(petId: string): Observable<void>;
+    /**
+     * @return Success
+     */
+    getRacesForPetType(petTypeValue: PetType): Observable<RaceDto[]>;
 }
 
 @Injectable()
-export class ItemDirApiClient implements IItemDirApiClient {
+export class PetsApiClient implements IPetsApiClient {
     private http: HttpClient;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -167,7 +199,7 @@ export class ItemDirApiClient implements IItemDirApiClient {
             withCredentials: true,
             headers: new HttpHeaders({
                 "Content-Type": "application/json-patch+json",
-                "Accept": "text/plain"
+                "Accept": "application/json"
             })
         };
 
@@ -219,7 +251,7 @@ export class ItemDirApiClient implements IItemDirApiClient {
             responseType: "blob",
             withCredentials: true,
             headers: new HttpHeaders({
-                "Accept": "text/plain"
+                "Accept": "application/json"
             })
         };
 
@@ -588,7 +620,7 @@ export class ItemDirApiClient implements IItemDirApiClient {
     /**
      * @return Success
      */
-    accountsAll(): Observable<AccountResponse[]> {
+    getAccounts(): Observable<AccountResponse[]> {
         let url_ = this.baseUrl + "/Accounts";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -597,16 +629,16 @@ export class ItemDirApiClient implements IItemDirApiClient {
             responseType: "blob",
             withCredentials: true,
             headers: new HttpHeaders({
-                "Accept": "text/plain"
+                "Accept": "application/json"
             })
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processAccountsAll(response_);
+            return this.processGetAccounts(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processAccountsAll(<any>response_);
+                    return this.processGetAccounts(<any>response_);
                 } catch (e) {
                     return <Observable<AccountResponse[]>><any>_observableThrow(e);
                 }
@@ -615,7 +647,7 @@ export class ItemDirApiClient implements IItemDirApiClient {
         }));
     }
 
-    protected processAccountsAll(response: HttpResponseBase): Observable<AccountResponse[]> {
+    protected processGetAccounts(response: HttpResponseBase): Observable<AccountResponse[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -653,7 +685,7 @@ export class ItemDirApiClient implements IItemDirApiClient {
      * @param body (optional) 
      * @return Success
      */
-    accounts(body: CreateRequest | undefined): Observable<AccountResponse> {
+    createAccount(body: CreateRequest | undefined): Observable<AccountResponse> {
         let url_ = this.baseUrl + "/Accounts";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -666,16 +698,16 @@ export class ItemDirApiClient implements IItemDirApiClient {
             withCredentials: true,
             headers: new HttpHeaders({
                 "Content-Type": "application/json-patch+json",
-                "Accept": "text/plain"
+                "Accept": "application/json"
             })
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processAccounts(response_);
+            return this.processCreateAccount(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processAccounts(<any>response_);
+                    return this.processCreateAccount(<any>response_);
                 } catch (e) {
                     return <Observable<AccountResponse>><any>_observableThrow(e);
                 }
@@ -684,7 +716,7 @@ export class ItemDirApiClient implements IItemDirApiClient {
         }));
     }
 
-    protected processAccounts(response: HttpResponseBase): Observable<AccountResponse> {
+    protected processCreateAccount(response: HttpResponseBase): Observable<AccountResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -717,7 +749,7 @@ export class ItemDirApiClient implements IItemDirApiClient {
     /**
      * @return Success
      */
-    accounts2(id: number): Observable<AccountResponse> {
+    getAccountById(id: number): Observable<AccountResponse> {
         let url_ = this.baseUrl + "/Accounts/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -729,16 +761,16 @@ export class ItemDirApiClient implements IItemDirApiClient {
             responseType: "blob",
             withCredentials: true,
             headers: new HttpHeaders({
-                "Accept": "text/plain"
+                "Accept": "application/json"
             })
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processAccounts2(response_);
+            return this.processGetAccountById(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processAccounts2(<any>response_);
+                    return this.processGetAccountById(<any>response_);
                 } catch (e) {
                     return <Observable<AccountResponse>><any>_observableThrow(e);
                 }
@@ -747,7 +779,7 @@ export class ItemDirApiClient implements IItemDirApiClient {
         }));
     }
 
-    protected processAccounts2(response: HttpResponseBase): Observable<AccountResponse> {
+    protected processGetAccountById(response: HttpResponseBase): Observable<AccountResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -781,7 +813,7 @@ export class ItemDirApiClient implements IItemDirApiClient {
      * @param body (optional) 
      * @return Success
      */
-    accounts3(id: number, body: UpdateRequest | undefined): Observable<AccountResponse> {
+    updateAccount(id: number, body: UpdateRequest | undefined): Observable<AccountResponse> {
         let url_ = this.baseUrl + "/Accounts/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -797,16 +829,16 @@ export class ItemDirApiClient implements IItemDirApiClient {
             withCredentials: true,
             headers: new HttpHeaders({
                 "Content-Type": "application/json-patch+json",
-                "Accept": "text/plain"
+                "Accept": "application/json"
             })
         };
 
         return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processAccounts3(response_);
+            return this.processUpdateAccount(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processAccounts3(<any>response_);
+                    return this.processUpdateAccount(<any>response_);
                 } catch (e) {
                     return <Observable<AccountResponse>><any>_observableThrow(e);
                 }
@@ -815,7 +847,7 @@ export class ItemDirApiClient implements IItemDirApiClient {
         }));
     }
 
-    protected processAccounts3(response: HttpResponseBase): Observable<AccountResponse> {
+    protected processUpdateAccount(response: HttpResponseBase): Observable<AccountResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -848,7 +880,7 @@ export class ItemDirApiClient implements IItemDirApiClient {
     /**
      * @return Success
      */
-    accounts4(id: number): Observable<void> {
+    deleteAccount(id: number): Observable<void> {
         let url_ = this.baseUrl + "/Accounts/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -864,11 +896,11 @@ export class ItemDirApiClient implements IItemDirApiClient {
         };
 
         return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processAccounts4(response_);
+            return this.processDeleteAccount(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processAccounts4(<any>response_);
+                    return this.processDeleteAccount(<any>response_);
                 } catch (e) {
                     return <Observable<void>><any>_observableThrow(e);
                 }
@@ -877,7 +909,7 @@ export class ItemDirApiClient implements IItemDirApiClient {
         }));
     }
 
-    protected processAccounts4(response: HttpResponseBase): Observable<void> {
+    protected processDeleteAccount(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -905,34 +937,10 @@ export class ItemDirApiClient implements IItemDirApiClient {
     }
 
     /**
-     * @param searchQuery (optional) 
-     * @param createdById (optional) 
-     * @param pageNumber (optional) 
-     * @param pageSize (optional) 
-     * @param orderBy (optional) 
-     * @param fields (optional) 
      * @return Success
      */
-    getItems(searchQuery: string | null | undefined, createdById: number | undefined, pageNumber: number | undefined, pageSize: number | undefined, orderBy: string | null | undefined, fields: string | null | undefined): Observable<LinkedCollectionResourceDto> {
-        let url_ = this.baseUrl + "/api/items?";
-        if (searchQuery !== undefined && searchQuery !== null)
-            url_ += "SearchQuery=" + encodeURIComponent("" + searchQuery) + "&";
-        if (createdById === null)
-            throw new Error("The parameter 'createdById' cannot be null.");
-        else if (createdById !== undefined)
-            url_ += "CreatedById=" + encodeURIComponent("" + createdById) + "&";
-        if (pageNumber === null)
-            throw new Error("The parameter 'pageNumber' cannot be null.");
-        else if (pageNumber !== undefined)
-            url_ += "PageNumber=" + encodeURIComponent("" + pageNumber) + "&";
-        if (pageSize === null)
-            throw new Error("The parameter 'pageSize' cannot be null.");
-        else if (pageSize !== undefined)
-            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
-        if (orderBy !== undefined && orderBy !== null)
-            url_ += "OrderBy=" + encodeURIComponent("" + orderBy) + "&";
-        if (fields !== undefined && fields !== null)
-            url_ += "Fields=" + encodeURIComponent("" + fields) + "&";
+    getPetTypes(): Observable<EnumDto[]> {
+        let url_ = this.baseUrl + "/api/enums/petTypes";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -945,20 +953,20 @@ export class ItemDirApiClient implements IItemDirApiClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetItems(response_);
+            return this.processGetPetTypes(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetItems(<any>response_);
+                    return this.processGetPetTypes(<any>response_);
                 } catch (e) {
-                    return <Observable<LinkedCollectionResourceDto>><any>_observableThrow(e);
+                    return <Observable<EnumDto[]>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<LinkedCollectionResourceDto>><any>_observableThrow(response_);
+                return <Observable<EnumDto[]>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetItems(response: HttpResponseBase): Observable<LinkedCollectionResourceDto> {
+    protected processGetPetTypes(response: HttpResponseBase): Observable<EnumDto[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -969,7 +977,11 @@ export class ItemDirApiClient implements IItemDirApiClient {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = LinkedCollectionResourceDto.fromJS(resultData200);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(EnumDto.fromJS(item));
+            }
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -977,7 +989,287 @@ export class ItemDirApiClient implements IItemDirApiClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<LinkedCollectionResourceDto>(<any>null);
+        return _observableOf<EnumDto[]>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getGenders(): Observable<EnumDto[]> {
+        let url_ = this.baseUrl + "/api/enums/genders";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetGenders(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetGenders(<any>response_);
+                } catch (e) {
+                    return <Observable<EnumDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<EnumDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetGenders(response: HttpResponseBase): Observable<EnumDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(EnumDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<EnumDto[]>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getAges(): Observable<EnumDto[]> {
+        let url_ = this.baseUrl + "/api/enums/ages";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAges(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAges(<any>response_);
+                } catch (e) {
+                    return <Observable<EnumDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<EnumDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAges(response: HttpResponseBase): Observable<EnumDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(EnumDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<EnumDto[]>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getSizes(): Observable<EnumDto[]> {
+        let url_ = this.baseUrl + "/api/enums/sizes";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetSizes(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetSizes(<any>response_);
+                } catch (e) {
+                    return <Observable<EnumDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<EnumDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetSizes(response: HttpResponseBase): Observable<EnumDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(EnumDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<EnumDto[]>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getFromWhere(): Observable<EnumDto[]> {
+        let url_ = this.baseUrl + "/api/enums/fromWhere";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetFromWhere(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetFromWhere(<any>response_);
+                } catch (e) {
+                    return <Observable<EnumDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<EnumDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetFromWhere(response: HttpResponseBase): Observable<EnumDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(EnumDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<EnumDto[]>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getCities(): Observable<EnumDto[]> {
+        let url_ = this.baseUrl + "/api/enums/cities";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetCities(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetCities(<any>response_);
+                } catch (e) {
+                    return <Observable<EnumDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<EnumDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetCities(response: HttpResponseBase): Observable<EnumDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(EnumDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<EnumDto[]>(<any>null);
     }
 
     /**
@@ -987,10 +1279,17 @@ export class ItemDirApiClient implements IItemDirApiClient {
      * @param pageSize (optional) 
      * @param orderBy (optional) 
      * @param fields (optional) 
+     * @param petType (optional) 
+     * @param cityId (optional) 
+     * @param raceId (optional) 
+     * @param age (optional) 
+     * @param gender (optional) 
+     * @param size (optional) 
+     * @param fromWhere (optional) 
      * @return Success
      */
-    items(searchQuery: string | null | undefined, createdById: number | undefined, pageNumber: number | undefined, pageSize: number | undefined, orderBy: string | null | undefined, fields: string | null | undefined): Observable<LinkedCollectionResourceDto> {
-        let url_ = this.baseUrl + "/api/items?";
+    getPets(searchQuery: string | null | undefined, createdById: number | undefined, pageNumber: number | undefined, pageSize: number | undefined, orderBy: string | null | undefined, fields: string | null | undefined, petType: PetType | undefined, cityId: number | undefined, raceId: number | undefined, age: PetAge | undefined, gender: Gender | undefined, size: Size | undefined, fromWhere: FromWhere | undefined): Observable<CollectionResourceDto> {
+        let url_ = this.baseUrl + "/api/pets?";
         if (searchQuery !== undefined && searchQuery !== null)
             url_ += "SearchQuery=" + encodeURIComponent("" + searchQuery) + "&";
         if (createdById === null)
@@ -1009,6 +1308,145 @@ export class ItemDirApiClient implements IItemDirApiClient {
             url_ += "OrderBy=" + encodeURIComponent("" + orderBy) + "&";
         if (fields !== undefined && fields !== null)
             url_ += "Fields=" + encodeURIComponent("" + fields) + "&";
+        if (petType === null)
+            throw new Error("The parameter 'petType' cannot be null.");
+        else if (petType !== undefined)
+            url_ += "PetType=" + encodeURIComponent("" + petType) + "&";
+        if (cityId === null)
+            throw new Error("The parameter 'cityId' cannot be null.");
+        else if (cityId !== undefined)
+            url_ += "CityId=" + encodeURIComponent("" + cityId) + "&";
+        if (raceId === null)
+            throw new Error("The parameter 'raceId' cannot be null.");
+        else if (raceId !== undefined)
+            url_ += "RaceId=" + encodeURIComponent("" + raceId) + "&";
+        if (age === null)
+            throw new Error("The parameter 'age' cannot be null.");
+        else if (age !== undefined)
+            url_ += "Age=" + encodeURIComponent("" + age) + "&";
+        if (gender === null)
+            throw new Error("The parameter 'gender' cannot be null.");
+        else if (gender !== undefined)
+            url_ += "Gender=" + encodeURIComponent("" + gender) + "&";
+        if (size === null)
+            throw new Error("The parameter 'size' cannot be null.");
+        else if (size !== undefined)
+            url_ += "Size=" + encodeURIComponent("" + size) + "&";
+        if (fromWhere === null)
+            throw new Error("The parameter 'fromWhere' cannot be null.");
+        else if (fromWhere !== undefined)
+            url_ += "FromWhere=" + encodeURIComponent("" + fromWhere) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPets(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPets(<any>response_);
+                } catch (e) {
+                    return <Observable<CollectionResourceDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<CollectionResourceDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetPets(response: HttpResponseBase): Observable<CollectionResourceDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CollectionResourceDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CollectionResourceDto>(<any>null);
+    }
+
+    /**
+     * @param searchQuery (optional) 
+     * @param createdById (optional) 
+     * @param pageNumber (optional) 
+     * @param pageSize (optional) 
+     * @param orderBy (optional) 
+     * @param fields (optional) 
+     * @param petType (optional) 
+     * @param cityId (optional) 
+     * @param raceId (optional) 
+     * @param age (optional) 
+     * @param gender (optional) 
+     * @param size (optional) 
+     * @param fromWhere (optional) 
+     * @return Success
+     */
+    pets(searchQuery: string | null | undefined, createdById: number | undefined, pageNumber: number | undefined, pageSize: number | undefined, orderBy: string | null | undefined, fields: string | null | undefined, petType: PetType | undefined, cityId: number | undefined, raceId: number | undefined, age: PetAge | undefined, gender: Gender | undefined, size: Size | undefined, fromWhere: FromWhere | undefined): Observable<CollectionResourceDto> {
+        let url_ = this.baseUrl + "/api/pets?";
+        if (searchQuery !== undefined && searchQuery !== null)
+            url_ += "SearchQuery=" + encodeURIComponent("" + searchQuery) + "&";
+        if (createdById === null)
+            throw new Error("The parameter 'createdById' cannot be null.");
+        else if (createdById !== undefined)
+            url_ += "CreatedById=" + encodeURIComponent("" + createdById) + "&";
+        if (pageNumber === null)
+            throw new Error("The parameter 'pageNumber' cannot be null.");
+        else if (pageNumber !== undefined)
+            url_ += "PageNumber=" + encodeURIComponent("" + pageNumber) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+        if (orderBy !== undefined && orderBy !== null)
+            url_ += "OrderBy=" + encodeURIComponent("" + orderBy) + "&";
+        if (fields !== undefined && fields !== null)
+            url_ += "Fields=" + encodeURIComponent("" + fields) + "&";
+        if (petType === null)
+            throw new Error("The parameter 'petType' cannot be null.");
+        else if (petType !== undefined)
+            url_ += "PetType=" + encodeURIComponent("" + petType) + "&";
+        if (cityId === null)
+            throw new Error("The parameter 'cityId' cannot be null.");
+        else if (cityId !== undefined)
+            url_ += "CityId=" + encodeURIComponent("" + cityId) + "&";
+        if (raceId === null)
+            throw new Error("The parameter 'raceId' cannot be null.");
+        else if (raceId !== undefined)
+            url_ += "RaceId=" + encodeURIComponent("" + raceId) + "&";
+        if (age === null)
+            throw new Error("The parameter 'age' cannot be null.");
+        else if (age !== undefined)
+            url_ += "Age=" + encodeURIComponent("" + age) + "&";
+        if (gender === null)
+            throw new Error("The parameter 'gender' cannot be null.");
+        else if (gender !== undefined)
+            url_ += "Gender=" + encodeURIComponent("" + gender) + "&";
+        if (size === null)
+            throw new Error("The parameter 'size' cannot be null.");
+        else if (size !== undefined)
+            url_ += "Size=" + encodeURIComponent("" + size) + "&";
+        if (fromWhere === null)
+            throw new Error("The parameter 'fromWhere' cannot be null.");
+        else if (fromWhere !== undefined)
+            url_ += "FromWhere=" + encodeURIComponent("" + fromWhere) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -1021,20 +1459,20 @@ export class ItemDirApiClient implements IItemDirApiClient {
         };
 
         return this.http.request("head", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processItems(response_);
+            return this.processPets(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processItems(<any>response_);
+                    return this.processPets(<any>response_);
                 } catch (e) {
-                    return <Observable<LinkedCollectionResourceDto>><any>_observableThrow(e);
+                    return <Observable<CollectionResourceDto>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<LinkedCollectionResourceDto>><any>_observableThrow(response_);
+                return <Observable<CollectionResourceDto>><any>_observableThrow(response_);
         }));
     }
 
-    protected processItems(response: HttpResponseBase): Observable<LinkedCollectionResourceDto> {
+    protected processPets(response: HttpResponseBase): Observable<CollectionResourceDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1045,7 +1483,7 @@ export class ItemDirApiClient implements IItemDirApiClient {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = LinkedCollectionResourceDto.fromJS(resultData200);
+            result200 = CollectionResourceDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1053,15 +1491,15 @@ export class ItemDirApiClient implements IItemDirApiClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<LinkedCollectionResourceDto>(<any>null);
+        return _observableOf<CollectionResourceDto>(<any>null);
     }
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    createItem(body: ItemForCreationDto | undefined): Observable<ItemDto> {
-        let url_ = this.baseUrl + "/api/items";
+    createPet(body: PetForCreationDto | undefined): Observable<PetFullDto> {
+        let url_ = this.baseUrl + "/api/pets";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -1078,20 +1516,20 @@ export class ItemDirApiClient implements IItemDirApiClient {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processCreateItem(response_);
+            return this.processCreatePet(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processCreateItem(<any>response_);
+                    return this.processCreatePet(<any>response_);
                 } catch (e) {
-                    return <Observable<ItemDto>><any>_observableThrow(e);
+                    return <Observable<PetFullDto>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<ItemDto>><any>_observableThrow(response_);
+                return <Observable<PetFullDto>><any>_observableThrow(response_);
         }));
     }
 
-    protected processCreateItem(response: HttpResponseBase): Observable<ItemDto> {
+    protected processCreatePet(response: HttpResponseBase): Observable<PetFullDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1102,7 +1540,7 @@ export class ItemDirApiClient implements IItemDirApiClient {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result201: any = null;
             let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result201 = ItemDto.fromJS(resultData201);
+            result201 = PetFullDto.fromJS(resultData201);
             return _observableOf(result201);
             }));
         } else if (status === 400) {
@@ -1125,14 +1563,14 @@ export class ItemDirApiClient implements IItemDirApiClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<ItemDto>(<any>null);
+        return _observableOf<PetFullDto>(<any>null);
     }
 
     /**
      * @return Success
      */
-    items2(): Observable<void> {
-        let url_ = this.baseUrl + "/api/items";
+    getPetsOptions(): Observable<void> {
+        let url_ = this.baseUrl + "/api/pets";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -1144,11 +1582,11 @@ export class ItemDirApiClient implements IItemDirApiClient {
         };
 
         return this.http.request("options", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processItems2(response_);
+            return this.processGetPetsOptions(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processItems2(<any>response_);
+                    return this.processGetPetsOptions(<any>response_);
                 } catch (e) {
                     return <Observable<void>><any>_observableThrow(e);
                 }
@@ -1157,7 +1595,7 @@ export class ItemDirApiClient implements IItemDirApiClient {
         }));
     }
 
-    protected processItems2(response: HttpResponseBase): Observable<void> {
+    protected processGetPetsOptions(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1177,17 +1615,13 @@ export class ItemDirApiClient implements IItemDirApiClient {
     }
 
     /**
-     * @param fields (optional) 
-     * @param accept (optional) 
      * @return Success
      */
-    getItem(itemId: string, fields: string | null | undefined, accept: string | null | undefined): Observable<{ [key: string]: any; }> {
-        let url_ = this.baseUrl + "/api/items/{itemId}?";
-        if (itemId === undefined || itemId === null)
-            throw new Error("The parameter 'itemId' must be defined.");
-        url_ = url_.replace("{itemId}", encodeURIComponent("" + itemId));
-        if (fields !== undefined && fields !== null)
-            url_ += "fields=" + encodeURIComponent("" + fields) + "&";
+    getPet(petId: string): Observable<PetFullDto> {
+        let url_ = this.baseUrl + "/api/pets/{petId}";
+        if (petId === undefined || petId === null)
+            throw new Error("The parameter 'petId' must be defined.");
+        url_ = url_.replace("{petId}", encodeURIComponent("" + petId));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -1195,25 +1629,25 @@ export class ItemDirApiClient implements IItemDirApiClient {
             responseType: "blob",
             withCredentials: true,
             headers: new HttpHeaders({
-                "Accept": accept !== undefined && accept !== null ? "" + accept : "",
+                "Accept": "application/json"
             })
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetItem(response_);
+            return this.processGetPet(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetItem(<any>response_);
+                    return this.processGetPet(<any>response_);
                 } catch (e) {
-                    return <Observable<{ [key: string]: any; }>><any>_observableThrow(e);
+                    return <Observable<PetFullDto>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<{ [key: string]: any; }>><any>_observableThrow(response_);
+                return <Observable<PetFullDto>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetItem(response: HttpResponseBase): Observable<{ [key: string]: any; }> {
+    protected processGetPet(response: HttpResponseBase): Observable<PetFullDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1224,13 +1658,7 @@ export class ItemDirApiClient implements IItemDirApiClient {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (resultData200) {
-                result200 = {} as any;
-                for (let key in resultData200) {
-                    if (resultData200.hasOwnProperty(key))
-                        result200![key] = resultData200[key];
-                }
-            }
+            result200 = PetFullDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1238,33 +1666,38 @@ export class ItemDirApiClient implements IItemDirApiClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<{ [key: string]: any; }>(<any>null);
+        return _observableOf<PetFullDto>(<any>null);
     }
 
     /**
+     * @param body (optional) 
      * @return Success
      */
-    deleteItem(itemId: string): Observable<void> {
-        let url_ = this.baseUrl + "/api/items/{itemId}";
-        if (itemId === undefined || itemId === null)
-            throw new Error("The parameter 'itemId' must be defined.");
-        url_ = url_.replace("{itemId}", encodeURIComponent("" + itemId));
+    updatePet(petId: string, body: PetForUpdateDto | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/pets/{petId}";
+        if (petId === undefined || petId === null)
+            throw new Error("The parameter 'petId' must be defined.");
+        url_ = url_.replace("{petId}", encodeURIComponent("" + petId));
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_ : any = {
+            body: content_,
             observe: "response",
             responseType: "blob",
             withCredentials: true,
             headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
             })
         };
 
-        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processDeleteItem(response_);
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdatePet(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processDeleteItem(<any>response_);
+                    return this.processUpdatePet(<any>response_);
                 } catch (e) {
                     return <Observable<void>><any>_observableThrow(e);
                 }
@@ -1273,7 +1706,7 @@ export class ItemDirApiClient implements IItemDirApiClient {
         }));
     }
 
-    protected processDeleteItem(response: HttpResponseBase): Observable<void> {
+    protected processUpdatePet(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1283,6 +1716,14 @@ export class ItemDirApiClient implements IItemDirApiClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             return _observableOf<void>(<any>null);
+            }));
+        } else if (status === 401) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            }));
+        } else if (status === 403) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("Forbidden", status, _responseText, _headers);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
@@ -1296,11 +1737,11 @@ export class ItemDirApiClient implements IItemDirApiClient {
      * @param body (optional) 
      * @return Success
      */
-    items3(itemId: string, body: Operation[] | null | undefined): Observable<void> {
-        let url_ = this.baseUrl + "/api/items/{itemId}";
-        if (itemId === undefined || itemId === null)
-            throw new Error("The parameter 'itemId' must be defined.");
-        url_ = url_.replace("{itemId}", encodeURIComponent("" + itemId));
+    partiallyUpdatePet(petId: string, body: Operation[] | null | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/pets/{petId}";
+        if (petId === undefined || petId === null)
+            throw new Error("The parameter 'petId' must be defined.");
+        url_ = url_.replace("{petId}", encodeURIComponent("" + petId));
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -1316,11 +1757,11 @@ export class ItemDirApiClient implements IItemDirApiClient {
         };
 
         return this.http.request("patch", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processItems3(response_);
+            return this.processPartiallyUpdatePet(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processItems3(<any>response_);
+                    return this.processPartiallyUpdatePet(<any>response_);
                 } catch (e) {
                     return <Observable<void>><any>_observableThrow(e);
                 }
@@ -1329,7 +1770,7 @@ export class ItemDirApiClient implements IItemDirApiClient {
         }));
     }
 
-    protected processItems3(response: HttpResponseBase): Observable<void> {
+    protected processPartiallyUpdatePet(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1339,6 +1780,14 @@ export class ItemDirApiClient implements IItemDirApiClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             return _observableOf<void>(<any>null);
+            }));
+        } else if (status === 401) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            }));
+        } else if (status === 403) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("Forbidden", status, _responseText, _headers);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
@@ -1351,8 +1800,11 @@ export class ItemDirApiClient implements IItemDirApiClient {
     /**
      * @return Success
      */
-    getRoot(): Observable<void> {
-        let url_ = this.baseUrl + "/api";
+    deletePet(petId: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/pets/{petId}";
+        if (petId === undefined || petId === null)
+            throw new Error("The parameter 'petId' must be defined.");
+        url_ = url_.replace("{petId}", encodeURIComponent("" + petId));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -1363,12 +1815,12 @@ export class ItemDirApiClient implements IItemDirApiClient {
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetRoot(response_);
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeletePet(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetRoot(<any>response_);
+                    return this.processDeletePet(<any>response_);
                 } catch (e) {
                     return <Observable<void>><any>_observableThrow(e);
                 }
@@ -1377,7 +1829,7 @@ export class ItemDirApiClient implements IItemDirApiClient {
         }));
     }
 
-    protected processGetRoot(response: HttpResponseBase): Observable<void> {
+    protected processDeletePet(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1387,6 +1839,14 @@ export class ItemDirApiClient implements IItemDirApiClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             return _observableOf<void>(<any>null);
+            }));
+        } else if (status === 401) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            }));
+        } else if (status === 403) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("Forbidden", status, _responseText, _headers);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
@@ -1399,11 +1859,70 @@ export class ItemDirApiClient implements IItemDirApiClient {
     /**
      * @return Success
      */
-    getTagsForItem(itemId: string): Observable<TagDto[]> {
-        let url_ = this.baseUrl + "/api/items/{itemId}/tags";
-        if (itemId === undefined || itemId === null)
-            throw new Error("The parameter 'itemId' must be defined.");
-        url_ = url_.replace("{itemId}", encodeURIComponent("" + itemId));
+    publishPet(petId: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/pets/{petId}/publish";
+        if (petId === undefined || petId === null)
+            throw new Error("The parameter 'petId' must be defined.");
+        url_ = url_.replace("{petId}", encodeURIComponent("" + petId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("patch", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processPublishPet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processPublishPet(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processPublishPet(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status === 401) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            }));
+        } else if (status === 403) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getRacesForPetType(petTypeValue: PetType): Observable<RaceDto[]> {
+        let url_ = this.baseUrl + "/api/races/{petTypeValue}";
+        if (petTypeValue === undefined || petTypeValue === null)
+            throw new Error("The parameter 'petTypeValue' must be defined.");
+        url_ = url_.replace("{petTypeValue}", encodeURIComponent("" + petTypeValue));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -1416,20 +1935,20 @@ export class ItemDirApiClient implements IItemDirApiClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetTagsForItem(response_);
+            return this.processGetRacesForPetType(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetTagsForItem(<any>response_);
+                    return this.processGetRacesForPetType(<any>response_);
                 } catch (e) {
-                    return <Observable<TagDto[]>><any>_observableThrow(e);
+                    return <Observable<RaceDto[]>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<TagDto[]>><any>_observableThrow(response_);
+                return <Observable<RaceDto[]>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetTagsForItem(response: HttpResponseBase): Observable<TagDto[]> {
+    protected processGetRacesForPetType(response: HttpResponseBase): Observable<RaceDto[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1443,7 +1962,7 @@ export class ItemDirApiClient implements IItemDirApiClient {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(TagDto.fromJS(item));
+                    result200!.push(RaceDto.fromJS(item));
             }
             return _observableOf(result200);
             }));
@@ -1452,121 +1971,7 @@ export class ItemDirApiClient implements IItemDirApiClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<TagDto[]>(<any>null);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    createTagForItem(itemId: string, body: TagForCreationDto | undefined): Observable<TagDto> {
-        let url_ = this.baseUrl + "/api/items/{itemId}/tags";
-        if (itemId === undefined || itemId === null)
-            throw new Error("The parameter 'itemId' must be defined.");
-        url_ = url_.replace("{itemId}", encodeURIComponent("" + itemId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_ : any = {
-            body: content_,
-            observe: "response",
-            responseType: "blob",
-            withCredentials: true,
-            headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processCreateTagForItem(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processCreateTagForItem(<any>response_);
-                } catch (e) {
-                    return <Observable<TagDto>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<TagDto>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processCreateTagForItem(response: HttpResponseBase): Observable<TagDto> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = TagDto.fromJS(resultData200);
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<TagDto>(<any>null);
-    }
-
-    /**
-     * @return Success
-     */
-    tags(itemId: string, tagId: string): Observable<void> {
-        let url_ = this.baseUrl + "/api/items/{itemId}/tags/{tagId}";
-        if (itemId === undefined || itemId === null)
-            throw new Error("The parameter 'itemId' must be defined.");
-        url_ = url_.replace("{itemId}", encodeURIComponent("" + itemId));
-        if (tagId === undefined || tagId === null)
-            throw new Error("The parameter 'tagId' must be defined.");
-        url_ = url_.replace("{tagId}", encodeURIComponent("" + tagId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            withCredentials: true,
-            headers: new HttpHeaders({
-            })
-        };
-
-        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processTags(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processTags(<any>response_);
-                } catch (e) {
-                    return <Observable<void>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<void>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processTags(response: HttpResponseBase): Observable<void> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(<any>null);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<void>(<any>null);
+        return _observableOf<RaceDto[]>(<any>null);
     }
 }
 
@@ -1612,7 +2017,7 @@ export interface IAuthenticateRequest {
 
 export class AuthenticateResponse implements IAuthenticateResponse {
     id?: number;
-    title?: string | undefined;
+    displayName?: string | undefined;
     firstName?: string | undefined;
     lastName?: string | undefined;
     email?: string | undefined;
@@ -1635,7 +2040,7 @@ export class AuthenticateResponse implements IAuthenticateResponse {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
-            this.title = _data["title"];
+            this.displayName = _data["displayName"];
             this.firstName = _data["firstName"];
             this.lastName = _data["lastName"];
             this.email = _data["email"];
@@ -1658,7 +2063,7 @@ export class AuthenticateResponse implements IAuthenticateResponse {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["title"] = this.title;
+        data["displayName"] = this.displayName;
         data["firstName"] = this.firstName;
         data["lastName"] = this.lastName;
         data["email"] = this.email;
@@ -1674,7 +2079,7 @@ export class AuthenticateResponse implements IAuthenticateResponse {
 
 export interface IAuthenticateResponse {
     id?: number;
-    title?: string | undefined;
+    displayName?: string | undefined;
     firstName?: string | undefined;
     lastName?: string | undefined;
     email?: string | undefined;
@@ -1723,7 +2128,6 @@ export interface IRevokeTokenRequest {
 }
 
 export class RegisterRequest implements IRegisterRequest {
-    title!: string;
     firstName!: string;
     lastName!: string;
     email!: string;
@@ -1742,7 +2146,6 @@ export class RegisterRequest implements IRegisterRequest {
 
     init(_data?: any) {
         if (_data) {
-            this.title = _data["title"];
             this.firstName = _data["firstName"];
             this.lastName = _data["lastName"];
             this.email = _data["email"];
@@ -1761,7 +2164,6 @@ export class RegisterRequest implements IRegisterRequest {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["title"] = this.title;
         data["firstName"] = this.firstName;
         data["lastName"] = this.lastName;
         data["email"] = this.email;
@@ -1773,7 +2175,6 @@ export class RegisterRequest implements IRegisterRequest {
 }
 
 export interface IRegisterRequest {
-    title: string;
     firstName: string;
     lastName: string;
     email: string;
@@ -1936,13 +2337,14 @@ export interface IResetPasswordRequest {
 
 export class AccountResponse implements IAccountResponse {
     id?: number;
-    title?: string | undefined;
+    displayName?: string | undefined;
     firstName?: string | undefined;
     lastName?: string | undefined;
     email?: string | undefined;
     role?: string | undefined;
     created?: Date;
     updated?: Date | undefined;
+    banned?: Date | undefined;
     isVerified?: boolean;
 
     constructor(data?: IAccountResponse) {
@@ -1957,13 +2359,14 @@ export class AccountResponse implements IAccountResponse {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
-            this.title = _data["title"];
+            this.displayName = _data["displayName"];
             this.firstName = _data["firstName"];
             this.lastName = _data["lastName"];
             this.email = _data["email"];
             this.role = _data["role"];
             this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
             this.updated = _data["updated"] ? new Date(_data["updated"].toString()) : <any>undefined;
+            this.banned = _data["banned"] ? new Date(_data["banned"].toString()) : <any>undefined;
             this.isVerified = _data["isVerified"];
         }
     }
@@ -1978,13 +2381,14 @@ export class AccountResponse implements IAccountResponse {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["title"] = this.title;
+        data["displayName"] = this.displayName;
         data["firstName"] = this.firstName;
         data["lastName"] = this.lastName;
         data["email"] = this.email;
         data["role"] = this.role;
         data["created"] = this.created ? this.created.toISOString() : <any>undefined;
         data["updated"] = this.updated ? this.updated.toISOString() : <any>undefined;
+        data["banned"] = this.banned ? this.banned.toISOString() : <any>undefined;
         data["isVerified"] = this.isVerified;
         return data; 
     }
@@ -1992,18 +2396,19 @@ export class AccountResponse implements IAccountResponse {
 
 export interface IAccountResponse {
     id?: number;
-    title?: string | undefined;
+    displayName?: string | undefined;
     firstName?: string | undefined;
     lastName?: string | undefined;
     email?: string | undefined;
     role?: string | undefined;
     created?: Date;
     updated?: Date | undefined;
+    banned?: Date | undefined;
     isVerified?: boolean;
 }
 
 export class CreateRequest implements ICreateRequest {
-    title!: string;
+    displayName!: string;
     firstName!: string;
     lastName!: string;
     role!: string;
@@ -2022,7 +2427,7 @@ export class CreateRequest implements ICreateRequest {
 
     init(_data?: any) {
         if (_data) {
-            this.title = _data["title"];
+            this.displayName = _data["displayName"];
             this.firstName = _data["firstName"];
             this.lastName = _data["lastName"];
             this.role = _data["role"];
@@ -2041,7 +2446,7 @@ export class CreateRequest implements ICreateRequest {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["title"] = this.title;
+        data["displayName"] = this.displayName;
         data["firstName"] = this.firstName;
         data["lastName"] = this.lastName;
         data["role"] = this.role;
@@ -2053,7 +2458,7 @@ export class CreateRequest implements ICreateRequest {
 }
 
 export interface ICreateRequest {
-    title: string;
+    displayName: string;
     firstName: string;
     lastName: string;
     role: string;
@@ -2063,7 +2468,7 @@ export interface ICreateRequest {
 }
 
 export class UpdateRequest implements IUpdateRequest {
-    title?: string | undefined;
+    displayName?: string | undefined;
     firstName?: string | undefined;
     lastName?: string | undefined;
     role?: string | undefined;
@@ -2082,7 +2487,7 @@ export class UpdateRequest implements IUpdateRequest {
 
     init(_data?: any) {
         if (_data) {
-            this.title = _data["title"];
+            this.displayName = _data["displayName"];
             this.firstName = _data["firstName"];
             this.lastName = _data["lastName"];
             this.role = _data["role"];
@@ -2101,7 +2506,7 @@ export class UpdateRequest implements IUpdateRequest {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["title"] = this.title;
+        data["displayName"] = this.displayName;
         data["firstName"] = this.firstName;
         data["lastName"] = this.lastName;
         data["role"] = this.role;
@@ -2113,7 +2518,7 @@ export class UpdateRequest implements IUpdateRequest {
 }
 
 export interface IUpdateRequest {
-    title?: string | undefined;
+    displayName?: string | undefined;
     firstName?: string | undefined;
     lastName?: string | undefined;
     role?: string | undefined;
@@ -2122,12 +2527,11 @@ export interface IUpdateRequest {
     confirmPassword?: string | undefined;
 }
 
-export class LinkDto implements ILinkDto {
-    href?: string | undefined;
-    rel?: string | undefined;
-    method?: string | undefined;
+export class EnumDto implements IEnumDto {
+    value?: string | undefined;
+    text?: string | undefined;
 
-    constructor(data?: ILinkDto) {
+    constructor(data?: IEnumDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2138,32 +2542,64 @@ export class LinkDto implements ILinkDto {
 
     init(_data?: any) {
         if (_data) {
-            this.href = _data["href"];
-            this.rel = _data["rel"];
-            this.method = _data["method"];
+            this.value = _data["value"];
+            this.text = _data["text"];
         }
     }
 
-    static fromJS(data: any): LinkDto {
+    static fromJS(data: any): EnumDto {
         data = typeof data === 'object' ? data : {};
-        let result = new LinkDto();
+        let result = new EnumDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["href"] = this.href;
-        data["rel"] = this.rel;
-        data["method"] = this.method;
+        data["value"] = this.value;
+        data["text"] = this.text;
         return data; 
     }
 }
 
-export interface ILinkDto {
-    href?: string | undefined;
-    rel?: string | undefined;
-    method?: string | undefined;
+export interface IEnumDto {
+    value?: string | undefined;
+    text?: string | undefined;
+}
+
+export enum PetType {
+    Cat = "Cat",
+    Dog = "Dog",
+}
+
+export enum PetAge {
+    None = "None",
+    Baby = "Baby",
+    Young = "Young",
+    Adult = "Adult",
+    Old = "Old",
+}
+
+export enum Gender {
+    None = "None",
+    Female = "Female",
+    Male = "Male",
+}
+
+export enum Size {
+    None = "None",
+    Small = "Small",
+    Medium = "Medium",
+    Large = "Large",
+}
+
+export enum FromWhere {
+    None = "None",
+    Shelter = "Shelter",
+    Vet = "Vet",
+    Foster = "Foster",
+    Street = "Street",
+    Owner = "Owner",
 }
 
 export class PaginationDto implements IPaginationDto {
@@ -2214,12 +2650,11 @@ export interface IPaginationDto {
     totalPages?: number;
 }
 
-export class LinkedCollectionResourceDto implements ILinkedCollectionResourceDto {
+export class CollectionResourceDto implements ICollectionResourceDto {
     value?: { [key: string]: any; }[] | undefined;
-    links?: LinkDto[] | undefined;
     pagination?: PaginationDto;
 
-    constructor(data?: ILinkedCollectionResourceDto) {
+    constructor(data?: ICollectionResourceDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2235,18 +2670,13 @@ export class LinkedCollectionResourceDto implements ILinkedCollectionResourceDto
                 for (let item of _data["value"])
                     this.value!.push(item);
             }
-            if (Array.isArray(_data["links"])) {
-                this.links = [] as any;
-                for (let item of _data["links"])
-                    this.links!.push(LinkDto.fromJS(item));
-            }
             this.pagination = _data["pagination"] ? PaginationDto.fromJS(_data["pagination"]) : <any>undefined;
         }
     }
 
-    static fromJS(data: any): LinkedCollectionResourceDto {
+    static fromJS(data: any): CollectionResourceDto {
         data = typeof data === 'object' ? data : {};
-        let result = new LinkedCollectionResourceDto();
+        let result = new CollectionResourceDto();
         result.init(data);
         return result;
     }
@@ -2258,72 +2688,29 @@ export class LinkedCollectionResourceDto implements ILinkedCollectionResourceDto
             for (let item of this.value)
                 data["value"].push(item);
         }
-        if (Array.isArray(this.links)) {
-            data["links"] = [];
-            for (let item of this.links)
-                data["links"].push(item.toJSON());
-        }
         data["pagination"] = this.pagination ? this.pagination.toJSON() : <any>undefined;
         return data; 
     }
 }
 
-export interface ILinkedCollectionResourceDto {
+export interface ICollectionResourceDto {
     value?: { [key: string]: any; }[] | undefined;
-    links?: LinkDto[] | undefined;
     pagination?: PaginationDto;
 }
 
-export enum ItemType {
-    Generic = "Generic",
-    Game = "Game",
-    Book = "Book",
-    Movie = "Movie",
-}
-
-export class TagForCreationDto implements ITagForCreationDto {
+export class PetForCreationDto implements IPetForCreationDto {
+    petTypeValue!: PetType;
     name!: string;
-
-    constructor(data?: ITagForCreationDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.name = _data["name"];
-        }
-    }
-
-    static fromJS(data: any): TagForCreationDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new TagForCreationDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        return data; 
-    }
-}
-
-export interface ITagForCreationDto {
-    name: string;
-}
-
-export class ItemForCreationDto implements IItemForCreationDto {
-    itemType?: ItemType;
-    tags?: TagForCreationDto[] | undefined;
     title!: string;
     description?: string | undefined;
+    ageValue?: PetAge;
+    genderValue?: Gender;
+    sizeValue?: Size;
+    fromWhereValue?: FromWhere;
+    raceId?: number | undefined;
+    cityId!: number;
 
-    constructor(data?: IItemForCreationDto) {
+    constructor(data?: IPetForCreationDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2334,53 +2721,260 @@ export class ItemForCreationDto implements IItemForCreationDto {
 
     init(_data?: any) {
         if (_data) {
-            this.itemType = _data["itemType"];
-            if (Array.isArray(_data["tags"])) {
-                this.tags = [] as any;
-                for (let item of _data["tags"])
-                    this.tags!.push(TagForCreationDto.fromJS(item));
-            }
+            this.petTypeValue = _data["petTypeValue"];
+            this.name = _data["name"];
             this.title = _data["title"];
             this.description = _data["description"];
+            this.ageValue = _data["ageValue"];
+            this.genderValue = _data["genderValue"];
+            this.sizeValue = _data["sizeValue"];
+            this.fromWhereValue = _data["fromWhereValue"];
+            this.raceId = _data["raceId"];
+            this.cityId = _data["cityId"];
         }
     }
 
-    static fromJS(data: any): ItemForCreationDto {
+    static fromJS(data: any): PetForCreationDto {
         data = typeof data === 'object' ? data : {};
-        let result = new ItemForCreationDto();
+        let result = new PetForCreationDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["itemType"] = this.itemType;
-        if (Array.isArray(this.tags)) {
-            data["tags"] = [];
-            for (let item of this.tags)
-                data["tags"].push(item.toJSON());
-        }
+        data["petTypeValue"] = this.petTypeValue;
+        data["name"] = this.name;
         data["title"] = this.title;
         data["description"] = this.description;
+        data["ageValue"] = this.ageValue;
+        data["genderValue"] = this.genderValue;
+        data["sizeValue"] = this.sizeValue;
+        data["fromWhereValue"] = this.fromWhereValue;
+        data["raceId"] = this.raceId;
+        data["cityId"] = this.cityId;
         return data; 
     }
 }
 
-export interface IItemForCreationDto {
-    itemType?: ItemType;
-    tags?: TagForCreationDto[] | undefined;
+export interface IPetForCreationDto {
+    petTypeValue: PetType;
+    name: string;
     title: string;
     description?: string | undefined;
+    ageValue?: PetAge;
+    genderValue?: Gender;
+    sizeValue?: Size;
+    fromWhereValue?: FromWhere;
+    raceId?: number | undefined;
+    cityId: number;
 }
 
-export class ItemDto implements IItemDto {
-    id?: string;
-    title?: string | undefined;
-    itemType?: ItemType;
-    description?: string | undefined;
-    creationDate?: Date;
+export class PetTypeEnumDto implements IPetTypeEnumDto {
+    value?: PetType;
+    text?: string | undefined;
 
-    constructor(data?: IItemDto) {
+    constructor(data?: IPetTypeEnumDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.value = _data["value"];
+            this.text = _data["text"];
+        }
+    }
+
+    static fromJS(data: any): PetTypeEnumDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PetTypeEnumDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["value"] = this.value;
+        data["text"] = this.text;
+        return data; 
+    }
+}
+
+export interface IPetTypeEnumDto {
+    value?: PetType;
+    text?: string | undefined;
+}
+
+export class PetAgeEnumDto implements IPetAgeEnumDto {
+    value?: PetAge;
+    text?: string | undefined;
+
+    constructor(data?: IPetAgeEnumDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.value = _data["value"];
+            this.text = _data["text"];
+        }
+    }
+
+    static fromJS(data: any): PetAgeEnumDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PetAgeEnumDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["value"] = this.value;
+        data["text"] = this.text;
+        return data; 
+    }
+}
+
+export interface IPetAgeEnumDto {
+    value?: PetAge;
+    text?: string | undefined;
+}
+
+export class GenderEnumDto implements IGenderEnumDto {
+    value?: Gender;
+    text?: string | undefined;
+
+    constructor(data?: IGenderEnumDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.value = _data["value"];
+            this.text = _data["text"];
+        }
+    }
+
+    static fromJS(data: any): GenderEnumDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GenderEnumDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["value"] = this.value;
+        data["text"] = this.text;
+        return data; 
+    }
+}
+
+export interface IGenderEnumDto {
+    value?: Gender;
+    text?: string | undefined;
+}
+
+export class SizeEnumDto implements ISizeEnumDto {
+    value?: Size;
+    text?: string | undefined;
+
+    constructor(data?: ISizeEnumDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.value = _data["value"];
+            this.text = _data["text"];
+        }
+    }
+
+    static fromJS(data: any): SizeEnumDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SizeEnumDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["value"] = this.value;
+        data["text"] = this.text;
+        return data; 
+    }
+}
+
+export interface ISizeEnumDto {
+    value?: Size;
+    text?: string | undefined;
+}
+
+export class FromWhereEnumDto implements IFromWhereEnumDto {
+    value?: FromWhere;
+    text?: string | undefined;
+
+    constructor(data?: IFromWhereEnumDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.value = _data["value"];
+            this.text = _data["text"];
+        }
+    }
+
+    static fromJS(data: any): FromWhereEnumDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new FromWhereEnumDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["value"] = this.value;
+        data["text"] = this.text;
+        return data; 
+    }
+}
+
+export interface IFromWhereEnumDto {
+    value?: FromWhere;
+    text?: string | undefined;
+}
+
+export class RaceDto implements IRaceDto {
+    id?: number;
+    name?: string | undefined;
+
+    constructor(data?: IRaceDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2392,16 +2986,13 @@ export class ItemDto implements IItemDto {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
-            this.title = _data["title"];
-            this.itemType = _data["itemType"];
-            this.description = _data["description"];
-            this.creationDate = _data["creationDate"] ? new Date(_data["creationDate"].toString()) : <any>undefined;
+            this.name = _data["name"];
         }
     }
 
-    static fromJS(data: any): ItemDto {
+    static fromJS(data: any): RaceDto {
         data = typeof data === 'object' ? data : {};
-        let result = new ItemDto();
+        let result = new RaceDto();
         result.init(data);
         return result;
     }
@@ -2409,20 +3000,146 @@ export class ItemDto implements IItemDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["title"] = this.title;
-        data["itemType"] = this.itemType;
-        data["description"] = this.description;
-        data["creationDate"] = this.creationDate ? this.creationDate.toISOString() : <any>undefined;
+        data["name"] = this.name;
         return data; 
     }
 }
 
-export interface IItemDto {
+export interface IRaceDto {
+    id?: number;
+    name?: string | undefined;
+}
+
+export class AccountDto implements IAccountDto {
+    id?: number;
+    displayName?: string | undefined;
+
+    constructor(data?: IAccountDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.displayName = _data["displayName"];
+        }
+    }
+
+    static fromJS(data: any): AccountDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AccountDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["displayName"] = this.displayName;
+        return data; 
+    }
+}
+
+export interface IAccountDto {
+    id?: number;
+    displayName?: string | undefined;
+}
+
+export class PetFullDto implements IPetFullDto {
     id?: string;
+    name?: string | undefined;
+    petStatusText?: string | undefined;
+    petType?: PetTypeEnumDto;
+    age?: PetAgeEnumDto;
+    gender?: GenderEnumDto;
+    size?: SizeEnumDto;
+    fromWhere?: FromWhereEnumDto;
     title?: string | undefined;
-    itemType?: ItemType;
     description?: string | undefined;
-    creationDate?: Date;
+    race?: RaceDto;
+    city?: EnumDto;
+    created?: Date;
+    createdBy?: AccountDto;
+    published?: Date | undefined;
+
+    constructor(data?: IPetFullDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.petStatusText = _data["petStatusText"];
+            this.petType = _data["petType"] ? PetTypeEnumDto.fromJS(_data["petType"]) : <any>undefined;
+            this.age = _data["age"] ? PetAgeEnumDto.fromJS(_data["age"]) : <any>undefined;
+            this.gender = _data["gender"] ? GenderEnumDto.fromJS(_data["gender"]) : <any>undefined;
+            this.size = _data["size"] ? SizeEnumDto.fromJS(_data["size"]) : <any>undefined;
+            this.fromWhere = _data["fromWhere"] ? FromWhereEnumDto.fromJS(_data["fromWhere"]) : <any>undefined;
+            this.title = _data["title"];
+            this.description = _data["description"];
+            this.race = _data["race"] ? RaceDto.fromJS(_data["race"]) : <any>undefined;
+            this.city = _data["city"] ? EnumDto.fromJS(_data["city"]) : <any>undefined;
+            this.created = _data["created"] ? new Date(_data["created"].toString()) : <any>undefined;
+            this.createdBy = _data["createdBy"] ? AccountDto.fromJS(_data["createdBy"]) : <any>undefined;
+            this.published = _data["published"] ? new Date(_data["published"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): PetFullDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PetFullDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["petStatusText"] = this.petStatusText;
+        data["petType"] = this.petType ? this.petType.toJSON() : <any>undefined;
+        data["age"] = this.age ? this.age.toJSON() : <any>undefined;
+        data["gender"] = this.gender ? this.gender.toJSON() : <any>undefined;
+        data["size"] = this.size ? this.size.toJSON() : <any>undefined;
+        data["fromWhere"] = this.fromWhere ? this.fromWhere.toJSON() : <any>undefined;
+        data["title"] = this.title;
+        data["description"] = this.description;
+        data["race"] = this.race ? this.race.toJSON() : <any>undefined;
+        data["city"] = this.city ? this.city.toJSON() : <any>undefined;
+        data["created"] = this.created ? this.created.toISOString() : <any>undefined;
+        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
+        data["published"] = this.published ? this.published.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IPetFullDto {
+    id?: string;
+    name?: string | undefined;
+    petStatusText?: string | undefined;
+    petType?: PetTypeEnumDto;
+    age?: PetAgeEnumDto;
+    gender?: GenderEnumDto;
+    size?: SizeEnumDto;
+    fromWhere?: FromWhereEnumDto;
+    title?: string | undefined;
+    description?: string | undefined;
+    race?: RaceDto;
+    city?: EnumDto;
+    created?: Date;
+    createdBy?: AccountDto;
+    published?: Date | undefined;
 }
 
 export class ProblemDetails implements IProblemDetails {
@@ -2477,6 +3194,74 @@ export interface IProblemDetails {
     instance?: string | undefined;
 }
 
+export class PetForUpdateDto implements IPetForUpdateDto {
+    name!: string;
+    title!: string;
+    description?: string | undefined;
+    ageValue?: PetAge;
+    genderValue?: Gender;
+    sizeValue?: Size;
+    fromWhereValue?: FromWhere;
+    raceId?: number | undefined;
+    cityId!: number;
+
+    constructor(data?: IPetForUpdateDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.title = _data["title"];
+            this.description = _data["description"];
+            this.ageValue = _data["ageValue"];
+            this.genderValue = _data["genderValue"];
+            this.sizeValue = _data["sizeValue"];
+            this.fromWhereValue = _data["fromWhereValue"];
+            this.raceId = _data["raceId"];
+            this.cityId = _data["cityId"];
+        }
+    }
+
+    static fromJS(data: any): PetForUpdateDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PetForUpdateDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["title"] = this.title;
+        data["description"] = this.description;
+        data["ageValue"] = this.ageValue;
+        data["genderValue"] = this.genderValue;
+        data["sizeValue"] = this.sizeValue;
+        data["fromWhereValue"] = this.fromWhereValue;
+        data["raceId"] = this.raceId;
+        data["cityId"] = this.cityId;
+        return data; 
+    }
+}
+
+export interface IPetForUpdateDto {
+    name: string;
+    title: string;
+    description?: string | undefined;
+    ageValue?: PetAge;
+    genderValue?: Gender;
+    sizeValue?: Size;
+    fromWhereValue?: FromWhere;
+    raceId?: number | undefined;
+    cityId: number;
+}
+
 export class Operation implements IOperation {
     value?: any | undefined;
     path?: string | undefined;
@@ -2523,46 +3308,6 @@ export interface IOperation {
     path?: string | undefined;
     op?: string | undefined;
     from?: string | undefined;
-}
-
-export class TagDto implements ITagDto {
-    id?: string;
-    name?: string | undefined;
-
-    constructor(data?: ITagDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-        }
-    }
-
-    static fromJS(data: any): TagDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new TagDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        return data; 
-    }
-}
-
-export interface ITagDto {
-    id?: string;
-    name?: string | undefined;
 }
 
 export class ApiException extends Error {

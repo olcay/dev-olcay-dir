@@ -10,7 +10,7 @@ const routes: Routes = [
         path: '', component: LayoutComponent,
         children: [
             { path: 'create', component: CreateComponent },
-            { path: ':itemid', component: DetailsComponent }            
+            { path: ':petid', component: DetailsComponent }            
         ]
     }
 ];
@@ -19,4 +19,4 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class ItemRoutingModule { }
+export class PetRoutingModule { }

@@ -15,11 +15,11 @@
 <div class="card text-center m-3">
     <h3 class="card-header">List</h3>
     <div class="card-body">
-        <div *ngFor="let item of pageOfItems">
+        <div *ngFor="let pet of pageOfItems">
             <h3>
-                <a routerLink="/item/{{ item.id }}">{{ item.title }}</a>
+                <a routerLink="/pet/{{ pet.id }}">{{ pet.title }}</a>
             </h3>
-            {{ item.description }}
+            {{ pet.description }}
         </div>
     </div>
     <div class="card-footer pb-0 pt-3">

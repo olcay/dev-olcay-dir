@@ -14,7 +14,7 @@ import { AccountService } from './_services';
 import { AppComponent } from './app.component';
 import { AlertComponent, JwPaginationComponent } from './_components';
 import { HomeComponent } from './home';
-import { API_BASE_URL, ItemDirApiClient } from './_services/itemdirapi.client';
+import { API_BASE_URL, PetsApiClient } from './_services/petsapi.client';
 
 @NgModule({
     imports: [
@@ -36,7 +36,7 @@ import { API_BASE_URL, ItemDirApiClient } from './_services/itemdirapi.client';
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
         { provide: API_BASE_URL, useValue: environment.apiUrl},
-        [ItemDirApiClient]
+        [PetsApiClient]
         // provider used to create fake backend
         //, fakeBackendProvider
     ],

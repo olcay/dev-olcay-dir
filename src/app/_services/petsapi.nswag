@@ -10,7 +10,7 @@
   },
   "codeGenerators": {
     "openApiToTypeScriptClient": {
-      "className": "ItemDirApiClient",
+      "className": "PetsApiClient",
       "moduleName": "",
       "namespace": "",
       "typeScriptVersion": 2.7,
@@ -66,7 +66,7 @@
       "enumNameGeneratorType": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "itemdirapi.client.ts",
+      "output": "petsapi.client.ts",
       "newLineBehavior": "Auto"
     }
   }

@@ -2,12 +2,12 @@
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AccountService, AlertService } from '@app/_services';
-import { ItemDirApiClient } from '@app/_services/itemdirapi.client';
+import { PetsApiClient } from '@app/_services/petsapi.client';
 
 @Component({ templateUrl: 'details.component.html' })
 export class DetailsComponent implements OnInit {
     account = this.accountService.accountValue;
-    itemid = this.activatedRoute.snapshot.params.itemid;
+    petid = this.activatedRoute.snapshot.params.petid;
     deleting = false;
 
     data: any = []
@@ -15,32 +15,25 @@ export class DetailsComponent implements OnInit {
 
     constructor(
         private accountService: AccountService,
-        private client: ItemDirApiClient,
+        private client: PetsApiClient,
         private activatedRoute: ActivatedRoute,
         private alertService: AlertService,
         private router: Router) { }
 
     getData() {
-        this.client.getItem(this.itemid, undefined, 'application/json')
+        this.client.getPet(this.petid)
             .subscribe(res => {
                 this.data = res;
-            }, error => console.error(error));
-
-        this.client.getTagsForItem(this.itemid)
-            .subscribe(res => {
-                res.forEach(tag => {  
-                    this.tags.push(tag.name);
-                }); 
             }, error => console.error(error));
     }
 
     onDelete() {
-        if (confirm('Are you sure to delete this item?')) {
+        if (confirm('Arşive kaldırmak istediğinize emin misiniz?')) {
             this.deleting = true;
 
-            this.client.deleteItem(this.itemid)
+            this.client.deletePet(this.petid)
                 .subscribe(() => {
-                    this.alertService.success('Item deleted successfully', { keepAfterRouteChange: true });
+                    this.alertService.success('Pet arşivlendi.', { keepAfterRouteChange: true });
                     this.router.navigate(['/']);
                 });
         }
