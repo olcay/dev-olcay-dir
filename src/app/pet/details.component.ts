@@ -1,8 +1,10 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Role } from '@app/_models';
 
 import { AccountService, AlertService } from '@app/_services';
 import { PetsApiClient } from '@app/_services/petsapi.client';
+import { ModalService } from '../_modal';
 
 @Component({ templateUrl: 'details.component.html' })
 export class DetailsComponent implements OnInit {
@@ -18,28 +20,36 @@ export class DetailsComponent implements OnInit {
         private client: PetsApiClient,
         private activatedRoute: ActivatedRoute,
         private alertService: AlertService,
-        private router: Router) { }
+        private router: Router,
+        private modalService: ModalService) { }
 
     getData() {
         this.client.getPet(this.petId)
             .subscribe(res => {
                 this.data = res;
+                this.data.isEditable = res.createdBy.id.toString() === this.account.id || this.account.role === Role.Admin;
             }, error => console.error(error));
     }
 
     onDelete() {
-        if (confirm('Arşive kaldırmak istediğinize emin misiniz?')) {
-            this.deleting = true;
+        this.deleting = true;
 
-            this.client.deletePet(this.petId)
-                .subscribe(() => {
-                    this.alertService.success('Pet arşivlendi.', { keepAfterRouteChange: true });
-                    this.router.navigate(['/']);
-                });
-        }
+        this.client.deletePet(this.petId)
+            .subscribe(() => {
+                this.alertService.success('Pet silindi.', { keepAfterRouteChange: true });
+                this.router.navigate(['/profile']);
+            });
     }
 
     ngOnInit() {
         this.getData()
+    }
+
+    openModal(id: string) {
+        this.modalService.open(id);
+    }
+
+    closeModal(id: string) {
+        this.modalService.close(id);
     }
 }

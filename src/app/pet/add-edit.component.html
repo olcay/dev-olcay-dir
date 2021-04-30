@@ -59,7 +59,7 @@
             </div>
         </div>
         <div class="form-group col">
-            <label>Nereden</label>
+            <label>Kimden</label>
             <select formControlName="fromWhereValue" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.fromWhereValue.errors }">
                 <option *ngFor="let fromWhere of data.fromWhere" [value]="fromWhere.value" [selected]="fromWhere.value == f.fromWhereValue">{{ fromWhere.text }}</option>
             </select>

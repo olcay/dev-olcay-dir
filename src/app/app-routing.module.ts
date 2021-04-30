@@ -11,7 +11,7 @@ const profileModule = () => import('./profile/profile.module').then(x => x.Profi
 const petModule = () => import('./pet/pet.module').then(x => x.PetModule);
 
 const routes: Routes = [
-    { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+    { path: '', component: HomeComponent },
     { path: 'account', loadChildren: accountModule },
     { path: 'profile', loadChildren: profileModule, canActivate: [AuthGuard] },
     { path: 'pet', loadChildren: petModule, canActivate: [AuthGuard] },

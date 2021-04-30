@@ -6,12 +6,14 @@ import { PetRoutingModule } from './pet-routing.module';
 import { LayoutComponent } from './layout.component';
 import { DetailsComponent } from './details.component';
 import { AddEditComponent } from './add-edit.component';
+import { ModalModule } from '@app/_modal';
 
 @NgModule({
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        PetRoutingModule
+        PetRoutingModule,
+        ModalModule
     ],
     declarations: [
         LayoutComponent,

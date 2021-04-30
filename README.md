@@ -29,5 +29,6 @@ Angular 10
 - [x] Deploy to Github Pages
 - [x] Integrate Pets API using NSwag
 - [x] Add pagination component
-- [ ] Manage pets
+- [x] Manage pets
 - [ ] Upload images
+- [ ] Messaging (Between users and feedback to admin)

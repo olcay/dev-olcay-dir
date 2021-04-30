@@ -1,13 +1,27 @@
 ﻿<section>
     <header>
         <h2>{{ data.title }}</h2>
-        <p>{{ data.petType }}</p>
-        <p>{{ data.created | date }}</p>
+        <p><b>{{ data.name }}</b>  {{ data.fromWhere?.text }}, {{ data.city?.text }}</p>
+        <p>{{ data.gender?.text }} {{ data.petType?.text }}, {{ data.race?.name }}, {{ data.age?.text }} ve {{ data.size?.text }}</p>
+        <p>{{ data.created | date }} tarihinde {{ data.createdBy?.displayName }} tarafından eklendi</p>
         <p>{{ data.description }}</p>
     </header>
 
+    <span *ngIf="data.isEditable">
+        <button routerLink="/pet/edit/{{data.id}}" class="btn btn-primary mr-2">Düzenle</button>
+        <button (click)="openModal('delete-modal')" class="btn btn-danger">Sil</button>
+    </span>
+
+    <p>ÜCRET İSTENİRSE GÜVENMEYİN!</p>
+    <p>Kargo/taşıma ücreti dahil herhangi bir sebeple ücret isteyen kişilere güvenmeyin.</p>
     
-    <button type="button" (click)="onDelete()" [disabled]="deleting">
-        Delete<span *ngIf="deleting">...</span>
-    </button>
 </section>
+
+<jw-modal id="delete-modal">
+    <ng-container body>Pet kaydı silinecek. Devam etmek istediğinize emin misiniz?</ng-container>
+    <ng-container submit>
+        <button type="button" (click)="onDelete()" [disabled]="deleting" class="btn btn-danger">
+            Sil<span *ngIf="deleting">...</span>
+        </button>
+    </ng-container>
+</jw-modal>

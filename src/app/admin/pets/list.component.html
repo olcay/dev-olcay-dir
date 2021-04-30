@@ -12,14 +12,15 @@
     <tbody>
         <tr *ngFor="let pet of pets">
             <td>{{pet.petTypeText}}</td>
-            <td>{{pet.name}}</td>
+            <td><a routerLink="/pet/{{pet.id}}">{{pet.name}}</a></td>
             <td>{{pet.title}}</td>
             <td>{{pet.created | date}}</td>
             <td style="white-space: nowrap">
-                <a routerLink="/pet/edit/{{pet.id}}" class="btn btn-sm btn-primary mr-1">Edit</a>
-                <button (click)="deletePet(pet.id)" class="btn btn-sm btn-danger btn-delete-account" [disabled]="pet.isDeleting">
+                <a routerLink="/pet/edit/{{pet.id}}" class="btn btn-sm btn-primary mr-1">Düzenle</a>
+                <button (click)="deletePet(pet.id)" class="btn btn-sm btn-danger btn-delete-account"
+                    [disabled]="pet.isDeleting">
                     <span *ngIf="pet.isDeleting" class="spinner-border spinner-border-sm"></span>
-                    <span *ngIf="!pet.isDeleting">Delete</span>
+                    <span *ngIf="!pet.isDeleting">Sil</span>
                 </button>
             </td>
         </tr>
