@@ -7,7 +7,7 @@ import { PetsApiClient } from '@app/_services/petsapi.client';
 @Component({ templateUrl: 'details.component.html' })
 export class DetailsComponent implements OnInit {
     account = this.accountService.accountValue;
-    petid = this.activatedRoute.snapshot.params.petid;
+    petId = this.activatedRoute.snapshot.params.id;
     deleting = false;
 
     data: any = []
@@ -21,7 +21,7 @@ export class DetailsComponent implements OnInit {
         private router: Router) { }
 
     getData() {
-        this.client.getPet(this.petid)
+        this.client.getPet(this.petId)
             .subscribe(res => {
                 this.data = res;
             }, error => console.error(error));
@@ -31,7 +31,7 @@ export class DetailsComponent implements OnInit {
         if (confirm('Arşive kaldırmak istediğinize emin misiniz?')) {
             this.deleting = true;
 
-            this.client.deletePet(this.petid)
+            this.client.deletePet(this.petId)
                 .subscribe(() => {
                     this.alertService.success('Pet arşivlendi.', { keepAfterRouteChange: true });
                     this.router.navigate(['/']);

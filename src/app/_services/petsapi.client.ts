@@ -118,23 +118,6 @@ export interface IPetsApiClient {
      */
     getPets(searchQuery: string | null | undefined, createdById: number | undefined, pageNumber: number | undefined, pageSize: number | undefined, orderBy: string | null | undefined, fields: string | null | undefined, petType: PetType | undefined, cityId: number | undefined, raceId: number | undefined, age: PetAge | undefined, gender: Gender | undefined, size: Size | undefined, fromWhere: FromWhere | undefined): Observable<CollectionResourceDto>;
     /**
-     * @param searchQuery (optional) 
-     * @param createdById (optional) 
-     * @param pageNumber (optional) 
-     * @param pageSize (optional) 
-     * @param orderBy (optional) 
-     * @param fields (optional) 
-     * @param petType (optional) 
-     * @param cityId (optional) 
-     * @param raceId (optional) 
-     * @param age (optional) 
-     * @param gender (optional) 
-     * @param size (optional) 
-     * @param fromWhere (optional) 
-     * @return Success
-     */
-    pets(searchQuery: string | null | undefined, createdById: number | undefined, pageNumber: number | undefined, pageSize: number | undefined, orderBy: string | null | undefined, fields: string | null | undefined, petType: PetType | undefined, cityId: number | undefined, raceId: number | undefined, age: PetAge | undefined, gender: Gender | undefined, size: Size | undefined, fromWhere: FromWhere | undefined): Observable<CollectionResourceDto>;
-    /**
      * @param body (optional) 
      * @return Success
      */
@@ -1384,117 +1367,6 @@ export class PetsApiClient implements IPetsApiClient {
     }
 
     /**
-     * @param searchQuery (optional) 
-     * @param createdById (optional) 
-     * @param pageNumber (optional) 
-     * @param pageSize (optional) 
-     * @param orderBy (optional) 
-     * @param fields (optional) 
-     * @param petType (optional) 
-     * @param cityId (optional) 
-     * @param raceId (optional) 
-     * @param age (optional) 
-     * @param gender (optional) 
-     * @param size (optional) 
-     * @param fromWhere (optional) 
-     * @return Success
-     */
-    pets(searchQuery: string | null | undefined, createdById: number | undefined, pageNumber: number | undefined, pageSize: number | undefined, orderBy: string | null | undefined, fields: string | null | undefined, petType: PetType | undefined, cityId: number | undefined, raceId: number | undefined, age: PetAge | undefined, gender: Gender | undefined, size: Size | undefined, fromWhere: FromWhere | undefined): Observable<CollectionResourceDto> {
-        let url_ = this.baseUrl + "/api/pets?";
-        if (searchQuery !== undefined && searchQuery !== null)
-            url_ += "SearchQuery=" + encodeURIComponent("" + searchQuery) + "&";
-        if (createdById === null)
-            throw new Error("The parameter 'createdById' cannot be null.");
-        else if (createdById !== undefined)
-            url_ += "CreatedById=" + encodeURIComponent("" + createdById) + "&";
-        if (pageNumber === null)
-            throw new Error("The parameter 'pageNumber' cannot be null.");
-        else if (pageNumber !== undefined)
-            url_ += "PageNumber=" + encodeURIComponent("" + pageNumber) + "&";
-        if (pageSize === null)
-            throw new Error("The parameter 'pageSize' cannot be null.");
-        else if (pageSize !== undefined)
-            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
-        if (orderBy !== undefined && orderBy !== null)
-            url_ += "OrderBy=" + encodeURIComponent("" + orderBy) + "&";
-        if (fields !== undefined && fields !== null)
-            url_ += "Fields=" + encodeURIComponent("" + fields) + "&";
-        if (petType === null)
-            throw new Error("The parameter 'petType' cannot be null.");
-        else if (petType !== undefined)
-            url_ += "PetType=" + encodeURIComponent("" + petType) + "&";
-        if (cityId === null)
-            throw new Error("The parameter 'cityId' cannot be null.");
-        else if (cityId !== undefined)
-            url_ += "CityId=" + encodeURIComponent("" + cityId) + "&";
-        if (raceId === null)
-            throw new Error("The parameter 'raceId' cannot be null.");
-        else if (raceId !== undefined)
-            url_ += "RaceId=" + encodeURIComponent("" + raceId) + "&";
-        if (age === null)
-            throw new Error("The parameter 'age' cannot be null.");
-        else if (age !== undefined)
-            url_ += "Age=" + encodeURIComponent("" + age) + "&";
-        if (gender === null)
-            throw new Error("The parameter 'gender' cannot be null.");
-        else if (gender !== undefined)
-            url_ += "Gender=" + encodeURIComponent("" + gender) + "&";
-        if (size === null)
-            throw new Error("The parameter 'size' cannot be null.");
-        else if (size !== undefined)
-            url_ += "Size=" + encodeURIComponent("" + size) + "&";
-        if (fromWhere === null)
-            throw new Error("The parameter 'fromWhere' cannot be null.");
-        else if (fromWhere !== undefined)
-            url_ += "FromWhere=" + encodeURIComponent("" + fromWhere) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            withCredentials: true,
-            headers: new HttpHeaders({
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("head", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processPets(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processPets(<any>response_);
-                } catch (e) {
-                    return <Observable<CollectionResourceDto>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<CollectionResourceDto>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processPets(response: HttpResponseBase): Observable<CollectionResourceDto> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = CollectionResourceDto.fromJS(resultData200);
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<CollectionResourceDto>(<any>null);
-    }
-
-    /**
      * @param body (optional) 
      * @return Success
      */
@@ -2568,6 +2440,7 @@ export interface IEnumDto {
 }
 
 export enum PetType {
+    All = "All",
     Cat = "Cat",
     Dog = "Dog",
 }

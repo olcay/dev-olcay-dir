@@ -3,14 +3,15 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { LayoutComponent } from './layout.component';
 import { DetailsComponent } from './details.component';
-import { CreateComponent } from './create.component';
+import { AddEditComponent } from './add-edit.component';
 
 const routes: Routes = [
     {
         path: '', component: LayoutComponent,
         children: [
-            { path: 'create', component: CreateComponent },
-            { path: ':petid', component: DetailsComponent }            
+            { path: ':id', component: DetailsComponent },
+            { path: 'add/:type', component: AddEditComponent },
+            { path: 'edit/:id', component: AddEditComponent }
         ]
     }
 ];

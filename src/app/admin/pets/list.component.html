@@ -1,0 +1,32 @@
+﻿<h1>Petler</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th style="width:30%">Türü</th>
+            <th style="width:30%">İsmi</th>
+            <th style="width:30%">Başlık</th>
+            <th style="width:30%">Oluşturulma Tarihi</th>
+            <th style="width:10%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let pet of pets">
+            <td>{{pet.petTypeText}}</td>
+            <td>{{pet.name}}</td>
+            <td>{{pet.title}}</td>
+            <td>{{pet.created | date}}</td>
+            <td style="white-space: nowrap">
+                <a routerLink="/pet/edit/{{pet.id}}" class="btn btn-sm btn-primary mr-1">Edit</a>
+                <button (click)="deletePet(pet.id)" class="btn btn-sm btn-danger btn-delete-account" [disabled]="pet.isDeleting">
+                    <span *ngIf="pet.isDeleting" class="spinner-border spinner-border-sm"></span>
+                    <span *ngIf="!pet.isDeleting">Delete</span>
+                </button>
+            </td>
+        </tr>
+        <tr *ngIf="!pets">
+            <td colspan="4" class="text-center">
+                <span class="spinner-border spinner-border-lg align-center"></span>
+            </td>
+        </tr>
+    </tbody>
+</table>

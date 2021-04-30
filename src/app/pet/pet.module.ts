@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { PetRoutingModule } from './pet-routing.module';
 import { LayoutComponent } from './layout.component';
 import { DetailsComponent } from './details.component';
-import { CreateComponent } from './create.component';
+import { AddEditComponent } from './add-edit.component';
 
 @NgModule({
     imports: [
@@ -16,7 +16,7 @@ import { CreateComponent } from './create.component';
     declarations: [
         LayoutComponent,
         DetailsComponent,
-        CreateComponent
+        AddEditComponent
     ]
 })
 export class PetModule { }

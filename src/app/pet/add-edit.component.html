@@ -1,0 +1,92 @@
+﻿<h1 *ngIf="isAddMode">{{ pageTitle }} Ekle</h1>
+<h1 *ngIf="!isAddMode">{{ pageTitle }} Güncelle</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+        <div class="form-group col">
+            <label>İsmi *</label>
+            <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+            <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                <div *ngIf="f.name.errors.required">İsim zorunlu</div>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col">
+            <label>Şehir *</label>
+            <select formControlName="cityId" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.cityId.errors }">
+                <option value="">-</option>
+                <option *ngFor="let city of data.cities" [value]="city.value" [selected]="city.value == f.cityId">{{ city.text }}</option>
+            </select>
+            <div *ngIf="submitted && f.cityId.errors" class="invalid-feedback">
+                <div *ngIf="f.name.errors.required">Şehir zorunlu</div>
+            </div>
+        </div>
+        <div class="form-group col">
+            <label>Irkı</label>
+            <select formControlName="raceId" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.raceId.errors }">
+                <option value="">-</option>
+                <option *ngFor="let race of data.races" [value]="race.id" [selected]="race.id == f.raceId">{{ race.name }}</option>
+            </select>
+            <div *ngIf="submitted && f.raceId.errors" class="invalid-feedback">
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col">
+            <label>Cinsiyeti</label>
+            <select formControlName="genderValue" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.genderValue.errors }">
+                <option *ngFor="let gender of data.genders" [value]="gender.value" [selected]="gender.value == f.genderValue">{{ gender.text }}</option>
+            </select>
+            <div *ngIf="submitted && f.genderValue.errors" class="invalid-feedback">
+            </div>
+        </div>
+        <div class="form-group col">
+            <label>Yaşı</label>
+            <select formControlName="ageValue" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.ageValue.errors }">
+                <option *ngFor="let age of data.ages" [value]="age.value" [selected]="age.value == f.ageValue">{{ age.text }}</option>
+            </select>
+            <div *ngIf="submitted && f.ageValue.errors" class="invalid-feedback">
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col">
+            <label>Boyutu</label>
+            <select formControlName="sizeValue" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.sizeValue.errors }">
+                <option *ngFor="let size of data.sizes" [value]="size.value" [selected]="size.value == f.sizeValue">{{ size.text }}</option>
+            </select>
+            <div *ngIf="submitted && f.sizeValue.errors" class="invalid-feedback">
+            </div>
+        </div>
+        <div class="form-group col">
+            <label>Nereden</label>
+            <select formControlName="fromWhereValue" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.fromWhereValue.errors }">
+                <option *ngFor="let fromWhere of data.fromWhere" [value]="fromWhere.value" [selected]="fromWhere.value == f.fromWhereValue">{{ fromWhere.text }}</option>
+            </select>
+            <div *ngIf="submitted && f.fromWhereValue.errors" class="invalid-feedback">
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col">
+            <label>Başlık *</label>
+            <input type="text" formControlName="title" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.title.errors }" />
+            <div *ngIf="submitted && f.title.errors" class="invalid-feedback">
+                <div *ngIf="f.title.errors.required">Başlık zorunlu</div>
+            </div>
+        </div>
+        <div class="form-group col-7">
+            <label>Açıklama</label>
+            <input type="text" formControlName="description" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.description.errors }" />
+            <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <button [disabled]="loading" class="btn btn-primary">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Kaydet
+        </button>
+        <a routerLink="/" class="btn btn-link">İptal</a>
+    </div>
+</form>
