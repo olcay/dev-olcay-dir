@@ -1,15 +1,28 @@
-﻿<div class="app-container" [ngClass]="{ 'bg-light': account }">
+﻿<div class="app-container">
     <!-- main nav -->
-    <nav class="navbar navbar-expand navbar-dark bg-dark">
-        <div class="navbar-nav">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
             <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
-                class="nav-item nav-link">Petibör</a>
-            <a *ngIf="account?.role === Role.Admin" routerLink="/admin" routerLinkActive="active"
-                class="nav-item nav-link">Yönetici</a>
-            <a *ngIf="account" routerLink="/profile" routerLinkActive="active" class="nav-item nav-link">Profil</a>
-            <a *ngIf="account" (click)="logout()" class="nav-item nav-link">Çıkış</a>
-            <a *ngIf="!account" routerLink="/account/login" routerLinkActive="active"
-                class="nav-item nav-link">Giriş</a>
+                class="navbar-brand">Petibör</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span
+                    class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li *ngIf="account?.role === Role.Admin" class="nav-item">
+                        <a routerLink="/admin" routerLinkActive="active" class="nav-link">Yönetici</a>
+                    </li>
+                    <li *ngIf="account" class="nav-item">
+                        <a routerLink="/profile" routerLinkActive="active" class="nav-link">Profil</a>
+                    </li>
+                    <li *ngIf="account" class="nav-item">
+                        <a (click)="logout()" class="nav-link">Çıkış</a>
+                    </li>
+                    <li *ngIf="!account" class="nav-item">
+                        <a routerLink="/account/login" routerLinkActive="active" class="nav-link">Giriş</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
@@ -21,4 +34,43 @@
 
     <!-- main router outlet -->
     <router-outlet></router-outlet>
+
+    <!-- Footer-->
+    <footer class="pt-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-5">
+                    <address>
+                        <strong>Hayvan Sahiplendirme Derneği</strong>
+                        <br />
+                        3481 Melrose Place
+                        <br />
+                        Beverly Hills, CA 90210
+                        <br />
+                    </address>
+                    <address>
+                        <abbr title="Phone">P:</abbr>
+                        (123) 456-7890
+                        <br />
+                        <abbr title="Email">E:</abbr>
+                        <a href="mailto:#">name@example.com</a>
+                    </address>
+                </div>
+                <div class="col-md-4 mb-5">
+                    <strong>Evlat Edin</strong>
+                    <br />
+                    <a href="#">Kedi Evlat Edin</a>
+                    <br />
+                    <a href="#">Köpek Evlat Edin</a>
+                </div>
+                <div class="col-md-4 mb-5">
+                    <strong>İlan Ver</strong>
+                    <br />
+                    <a routerLink="/pet/add/cat">Kedi Yuva Arıyor</a>
+                    <br />
+                    <a routerLink="/pet/add/dog">Köpek Yuva Arıyor</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 </div>

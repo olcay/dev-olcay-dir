@@ -45,6 +45,13 @@ export class DetailsComponent implements OnInit {
         this.getData()
     }
 
+    onPublish() {
+        this.client.publishPet(this.petId)
+            .subscribe(() => {
+                this.alertService.success('Pet ilanı yayınlandı.', { keepAfterRouteChange: true });
+            });
+    }
+
     openModal(id: string) {
         this.modalService.open(id);
     }

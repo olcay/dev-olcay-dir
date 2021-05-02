@@ -14,7 +14,7 @@ const routes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'account', loadChildren: accountModule },
     { path: 'profile', loadChildren: profileModule, canActivate: [AuthGuard] },
-    { path: 'pet', loadChildren: petModule, canActivate: [AuthGuard] },
+    { path: 'pet', loadChildren: petModule },
     { path: 'admin', loadChildren: adminModule, canActivate: [AuthGuard], data: { roles: [Role.Admin] } },
 
     // otherwise redirect to home

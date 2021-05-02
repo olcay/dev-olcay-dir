@@ -1,20 +1,51 @@
 ﻿<section>
-    <header>
-        <h2>{{ data.title }}</h2>
-        <p><b>{{ data.name }}</b>  {{ data.fromWhere?.text }}, {{ data.city?.text }}</p>
-        <p>{{ data.gender?.text }} {{ data.petType?.text }}, {{ data.race?.name }}, {{ data.age?.text }} ve {{ data.size?.text }}</p>
-        <p>{{ data.created | date }} tarihinde {{ data.createdBy?.displayName }} tarafından eklendi</p>
-        <p>{{ data.description }}</p>
-    </header>
+    <div class="container">
+        <div class="row">
+            <!-- Post content-->
+            <div class="col-lg-8">
+                <!-- Title-->
+                <h1 class="mt-4">{{ data.title }}</h1>
+                <!-- Date and time-->
+                <p>{{ data.created | date }} tarihinde {{ data.createdBy?.displayName }} tarafından eklendi</p>
+                <br />
+                <!-- Preview image-->
+                <img class="img-fluid rounded" src="http://placekitten.com/900/400" alt="{{ data.name }}" />
+                <br /><br />
+                <!-- Post content-->
+                <p class="lead">{{ data.description }}</p>
+            </div>
+            <!-- Sidebar widgets column-->
+            <div class="col-md-4">
+                <!-- Side widget-->
+                <div class="card border-primary my-4">
+                    <h5 class="card-header">{{ data.name }}</h5>
+                    <div class="card-body">
+                        <p>{{ data.fromWhere?.text }}, {{ data.city?.text }}</p>
+                        <p>{{ data.gender?.text }} {{ data.race?.name }}</p>
+                        <p>{{ data.age?.text }} ve {{ data.size?.text }}</p>
+                    </div>
+                </div>
 
-    <span *ngIf="data.isEditable">
-        <button routerLink="/pet/edit/{{data.id}}" class="btn btn-primary mr-2">Düzenle</button>
-        <button (click)="openModal('delete-modal')" class="btn btn-danger">Sil</button>
-    </span>
+                <div *ngIf="data.isEditable" class="card my-4">
+                    <h5 class="card-header">İlan İşlemleri</h5>
+                    <div class="card-body">
+                        <button (click)="onPublish()" class="btn btn-primary mr-2">Yayınla</button>
+                        <button routerLink="/pet/edit/{{data.id}}" class="btn btn-primary mr-2">Düzenle</button>
+                        <button (click)="openModal('delete-modal')" class="btn btn-danger">Sil</button>
+                    </div>
+                </div>
 
-    <p>ÜCRET İSTENİRSE GÜVENMEYİN!</p>
-    <p>Kargo/taşıma ücreti dahil herhangi bir sebeple ücret isteyen kişilere güvenmeyin.</p>
-    
+                <div class="card border-danger my-4">
+                    <h5 class="card-header">Uyarı</h5>
+                    <div class="card-body">
+                        <h4 class="card-title">ÜCRET İSTENİRSE GÜVENMEYİN!</h4>
+                        Kargo/taşıma ücreti dahil herhangi bir sebeple ücret isteyen kişilere güvenmeyin.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </section>
 
 <jw-modal id="delete-modal">

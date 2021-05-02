@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit {
 
     getData() {
         // get items for total count
-        this.client.getPets(null, 0, 0, 0, null, null, PetType.Cat, 0, 0, PetAge.None, Gender.None, Size.None, FromWhere.None)
+        this.client.getPets(null, 0, 0, 0, null, null, PetType.All, 0, 0, PetAge.None, Gender.None, Size.None, FromWhere.None)
             .subscribe(res => {
                 this.itemLength = res.pagination.totalCount;
             }, error => console.error(error));
@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
     }
 
     onChangePage(pageNumber) {
-        this.client.getPets(null, 0, pageNumber, 10, null, null, PetType.Cat, 0, 0, PetAge.None, Gender.None, Size.None, FromWhere.None)
+        this.client.getPets(null, 0, pageNumber, 10, null, null, PetType.All, 0, 0, PetAge.None, Gender.None, Size.None, FromWhere.None)
             .subscribe(res => {
                 this.pageOfItems = res.value;
             }, error => console.error(error));

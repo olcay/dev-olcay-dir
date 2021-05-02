@@ -1,22 +1,53 @@
-﻿<div class="p-4">
-    <div class="container">
-        <h1>Merhaba {{account?.firstName}}!</h1>        
-        <p>Yeni <a routerLink="/pet/add/cat">Kedi</a> veya <a routerLink="/pet/add/dog">Köpek</a> ekle.</p>
-    </div>
-    
-</div>
-
-<div class="card text-center m-3">
-    <h3 class="card-header">List</h3>
-    <div class="card-body">
-        <div *ngFor="let pet of pageOfItems">
-            <h3>
-                <a routerLink="/pet/{{ pet.id }}">{{ pet.title }}</a>
-            </h3>
-            {{ pet.description }}
+﻿<!-- Header-->
+<header class="bg-primary py-5 mb-5">
+    <div class="container h-100">
+        <div class="row h-100 align-items-center">
+            <div class="col-lg-12">
+                <h1 class="display-4 text-white mt-5 mb-2">Hayvan Sahiplendirme Derneği</h1>
+                <p class="lead mb-5 text-white-50">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non
+                    possimus ab labore provident mollitia. Id assumenda voluptate earum corporis facere quibusdam
+                    quisquam iste ipsa cumque unde nisi, totam quas ipsam.</p>
+            </div>
         </div>
     </div>
-    <div class="card-footer pb-0 pt-3">
-        <jw-pagination [itemLength]="itemLength" (changePage)="onChangePage($event)"></jw-pagination>
+</header>
+<!-- Page Content-->
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 mb-5">
+            <h2>What We Do</h2>
+            <hr />
+            <p *ngIf="account">Merhaba {{account.firstName}}, seni aramızda görmek çok güzel!</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A deserunt neque tempore recusandae animi
+                soluta quasi? Asperiores rem dolore eaque vel, porro, soluta unde debitis aliquam laboriosam. Repellat
+                explicabo, maiores!</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis optio neque consectetur consequatur magni
+                in nisi, natus beatae quidem quam odit commodi ducimus totam eum, alias, adipisci nesciunt voluptate.
+                Voluptatum.</p>
+            <a class="btn btn-secondary btn-lg mr-2" routerLink="/pet/add/cat">Kedi İlanı Ver</a>
+            <a class="btn btn-secondary btn-lg mr-2" routerLink="/pet/add/dog">Köpek İlanı Ver</a>
+            veya
+            <a class="btn btn-primary btn-lg" routerLink="/pet">Evlat Edin</a>
+        </div>
     </div>
+    <div class="row">
+
+        <div *ngFor="let pet of pageOfItems" class="col-md-4 mb-5">
+            <div class="card h-100">
+                <a routerLink="/pet/{{ pet.id }}">
+                    <img class="card-img-top" src="http://placekitten.com/300/200" alt="{{ pet.title }}" />
+                </a>
+                <div class="card-body">
+                    <h4 class="card-title"><a routerLink="/pet/{{ pet.id }}">{{ pet.title }}</a></h4>
+                    <p class="card-text">{{ pet.description | slice:0:100 }}...</p>
+                </div>
+                <div class="card-footer">
+                    {{ pet.published | date }}
+                    <a class="btn btn-primary" routerLink="/pet/{{ pet.id }}">Sahiplen!</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <jw-pagination [itemLength]="itemLength" (changePage)="onChangePage($event)"></jw-pagination>
 </div>

@@ -27,8 +27,14 @@ export class AddEditComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.petId = this.route.snapshot.params['id'];
-        this.petType = this.route.snapshot.params['type'];
+        this.route.params.subscribe(params => {
+            this.petId = params['id'];
+            this.petType = params['type'];
+            this.fillInTheBlanks();
+          });
+    }
+
+    fillInTheBlanks() {
         this.isAddMode = !this.petId;
 
         this.form = this.formBuilder.group({
@@ -129,9 +135,9 @@ export class AddEditComponent implements OnInit {
         this.client.createPet(this.form.value)
             .pipe(first())
             .subscribe({
-                next: () => {
+                next: (pet) => {
                     this.alertService.success('Pet başarıyla eklendi.', { keepAfterRouteChange: true });
-                    this.router.navigate(['../../'], { relativeTo: this.route });
+                    this.router.navigate(['/pet/' + pet.id], { relativeTo: this.route });
                 },
                 error: error => {
                     this.alertService.error(error);
@@ -146,7 +152,7 @@ export class AddEditComponent implements OnInit {
             .subscribe({
                 next: () => {
                     this.alertService.success('Güncelleme başarılı.', { keepAfterRouteChange: true });
-                    this.router.navigate(['../../'], { relativeTo: this.route });
+                    this.router.navigate(['/pet/' + this.petId], { relativeTo: this.route });
                 },
                 error: error => {
                     this.alertService.error(error);
