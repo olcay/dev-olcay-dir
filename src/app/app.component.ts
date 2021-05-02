@@ -7,6 +7,7 @@ import { Account, Role } from './_models';
 export class AppComponent {
     Role = Role;
     account: Account;
+    navbarOpen = false;
 
     constructor(private accountService: AccountService) {
         this.accountService.account.subscribe(x => this.account = x);
@@ -14,5 +15,9 @@ export class AppComponent {
 
     logout() {
         this.accountService.logout();
+    }
+
+    toggleNavbar() {
+        this.navbarOpen = !this.navbarOpen;
     }
 }

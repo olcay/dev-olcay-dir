@@ -27,9 +27,14 @@
                 </div>
 
                 <div *ngIf="data.isEditable" class="card my-4">
-                    <h5 class="card-header">İlan İşlemleri</h5>
+                    <h5 class="card-header">İlan</h5>
                     <div class="card-body">
-                        <button (click)="onPublish()" class="btn btn-primary mr-2">Yayınla</button>
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="customSwitch1"
+                                [checked]="data.petStatus.value == 'Published'" (change)="onChangeStatus()">
+                            <label class="custom-control-label" for="customSwitch1">{{ data.petStatus.text }}</label>
+                        </div>
+                        <br/>
                         <button routerLink="/pet/edit/{{data.id}}" class="btn btn-primary mr-2">Düzenle</button>
                         <button (click)="openModal('delete-modal')" class="btn btn-danger">Sil</button>
                     </div>

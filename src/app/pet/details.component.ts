@@ -42,14 +42,21 @@ export class DetailsComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.getData()
+        this.getData();
     }
 
-    onPublish() {
-        this.client.publishPet(this.petId)
+    onChangeStatus() {
+        if (this.data.petStatus.value == "Published"){
+            this.client.unpublishPet(this.petId)
             .subscribe(() => {
-                this.alertService.success('Pet ilanı yayınlandı.', { keepAfterRouteChange: true });
+                this.getData();
             });
+        } else {
+            this.client.publishPet(this.petId)
+            .subscribe(() => {
+                this.getData();
+            });
+        }
     }
 
     openModal(id: string) {

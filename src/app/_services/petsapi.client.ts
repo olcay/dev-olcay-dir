@@ -151,6 +151,10 @@ export interface IPetsApiClient {
     /**
      * @return Success
      */
+    unpublishPet(petId: string): Observable<void>;
+    /**
+     * @return Success
+     */
     getRacesForPetType(petTypeValue: PetType): Observable<RaceDto[]>;
 }
 
@@ -1790,6 +1794,65 @@ export class PetsApiClient implements IPetsApiClient {
     /**
      * @return Success
      */
+    unpublishPet(petId: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/pets/{petId}/unpublish";
+        if (petId === undefined || petId === null)
+            throw new Error("The parameter 'petId' must be defined.");
+        url_ = url_.replace("{petId}", encodeURIComponent("" + petId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("patch", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUnpublishPet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUnpublishPet(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<void>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUnpublishPet(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(<any>null);
+            }));
+        } else if (status === 401) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            }));
+        } else if (status === 403) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
     getRacesForPetType(petTypeValue: PetType): Observable<RaceDto[]> {
         let url_ = this.baseUrl + "/api/races/{petTypeValue}";
         if (petTypeValue === undefined || petTypeValue === null)
@@ -2643,6 +2706,53 @@ export interface IPetForCreationDto {
     cityId: number;
 }
 
+export enum PetStatus {
+    Created = "Created",
+    Published = "Published",
+    Adopted = "Adopted",
+    Deleted = "Deleted",
+}
+
+export class PetStatusEnumDto implements IPetStatusEnumDto {
+    value?: PetStatus;
+    text?: string | undefined;
+
+    constructor(data?: IPetStatusEnumDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.value = _data["value"];
+            this.text = _data["text"];
+        }
+    }
+
+    static fromJS(data: any): PetStatusEnumDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PetStatusEnumDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["value"] = this.value;
+        data["text"] = this.text;
+        return data; 
+    }
+}
+
+export interface IPetStatusEnumDto {
+    value?: PetStatus;
+    text?: string | undefined;
+}
+
 export class PetTypeEnumDto implements IPetTypeEnumDto {
     value?: PetType;
     text?: string | undefined;
@@ -2926,7 +3036,7 @@ export interface IAccountDto {
 export class PetFullDto implements IPetFullDto {
     id?: string;
     name?: string | undefined;
-    petStatusText?: string | undefined;
+    petStatus?: PetStatusEnumDto;
     petType?: PetTypeEnumDto;
     age?: PetAgeEnumDto;
     gender?: GenderEnumDto;
@@ -2953,7 +3063,7 @@ export class PetFullDto implements IPetFullDto {
         if (_data) {
             this.id = _data["id"];
             this.name = _data["name"];
-            this.petStatusText = _data["petStatusText"];
+            this.petStatus = _data["petStatus"] ? PetStatusEnumDto.fromJS(_data["petStatus"]) : <any>undefined;
             this.petType = _data["petType"] ? PetTypeEnumDto.fromJS(_data["petType"]) : <any>undefined;
             this.age = _data["age"] ? PetAgeEnumDto.fromJS(_data["age"]) : <any>undefined;
             this.gender = _data["gender"] ? GenderEnumDto.fromJS(_data["gender"]) : <any>undefined;
@@ -2980,7 +3090,7 @@ export class PetFullDto implements IPetFullDto {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["name"] = this.name;
-        data["petStatusText"] = this.petStatusText;
+        data["petStatus"] = this.petStatus ? this.petStatus.toJSON() : <any>undefined;
         data["petType"] = this.petType ? this.petType.toJSON() : <any>undefined;
         data["age"] = this.age ? this.age.toJSON() : <any>undefined;
         data["gender"] = this.gender ? this.gender.toJSON() : <any>undefined;
@@ -3000,7 +3110,7 @@ export class PetFullDto implements IPetFullDto {
 export interface IPetFullDto {
     id?: string;
     name?: string | undefined;
-    petStatusText?: string | undefined;
+    petStatus?: PetStatusEnumDto;
     petType?: PetTypeEnumDto;
     age?: PetAgeEnumDto;
     gender?: GenderEnumDto;
