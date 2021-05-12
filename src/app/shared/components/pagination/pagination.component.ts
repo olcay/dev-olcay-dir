@@ -3,12 +3,11 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@
 import { JwtPaginator } from '@app/_helpers';
 
 @Component({
-    selector: 'app-shared',
-    templateUrl: './shared.component.html',
-    styleUrls: ['./shared.component.less']
+    selector: 'pagination',
+    templateUrl: './pagination.component.html',
+    styleUrls: ['./pagination.component.less']
 })
-export class SharedComponent implements OnInit {
-    @Input() name: string;
+export class PaginationComponent implements OnInit {
     constructor() { }
     @Input() itemLength: number;
     @Output() changePage = new EventEmitter<any>(true);
