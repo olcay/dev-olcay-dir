@@ -1,9 +1,15 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 
 import { JwtPaginator } from '@app/_helpers';
 
-@Component({ selector: 'jw-pagination', templateUrl: 'pagination.component.html' })
-export class JwPaginationComponent implements OnInit, OnChanges {
+@Component({
+    selector: 'app-shared',
+    templateUrl: './shared.component.html',
+    styleUrls: ['./shared.component.less']
+})
+export class SharedComponent implements OnInit {
+    @Input() name: string;
+    constructor() { }
     @Input() itemLength: number;
     @Output() changePage = new EventEmitter<any>(true);
     @Input() initialPage = 1;
@@ -33,4 +39,5 @@ export class JwPaginationComponent implements OnInit, OnChanges {
         // call change page function in parent component
         this.changePage.emit(page);
     }
+
 }

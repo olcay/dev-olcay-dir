@@ -12,9 +12,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { JwtInterceptor, ErrorInterceptor, appInitializer } from './_helpers';
 import { AccountService } from './_services';
 import { AppComponent } from './app.component';
-import { AlertComponent, JwPaginationComponent } from './_components';
+import { AlertComponent } from './_components';
 import { HomeComponent } from './home';
 import { API_BASE_URL, PetsApiClient } from './_services/petsapi.client';
+
+import { SharedModule } from "./shared/shared.module";
 
 @NgModule({
     imports: [
@@ -23,12 +25,12 @@ import { API_BASE_URL, PetsApiClient } from './_services/petsapi.client';
         FormsModule,
         ModalModule,
         HttpClientModule,
-        AppRoutingModule
+        AppRoutingModule,
+        SharedModule
     ],
     declarations: [
         AppComponent,
         AlertComponent,
-        JwPaginationComponent,
         HomeComponent
     ],
     providers: [

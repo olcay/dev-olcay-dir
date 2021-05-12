@@ -6,19 +6,23 @@ import { PetRoutingModule } from './pet-routing.module';
 import { LayoutComponent } from './layout.component';
 import { DetailsComponent } from './details.component';
 import { AddEditComponent } from './add-edit.component';
+import { ListComponent } from './list.component';
 import { ModalModule } from '@app/_modal';
+import { SharedModule } from '@app/shared/shared.module';
 
 @NgModule({
     imports: [
         CommonModule,
         ReactiveFormsModule,
         PetRoutingModule,
-        ModalModule
+        ModalModule,
+        SharedModule
     ],
     declarations: [
         LayoutComponent,
         DetailsComponent,
-        AddEditComponent
+        AddEditComponent,
+        ListComponent
     ]
 })
 export class PetModule { }
