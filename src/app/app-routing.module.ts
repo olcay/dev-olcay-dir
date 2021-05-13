@@ -13,7 +13,7 @@ const petModule = () => import('./pet/pet.module').then(x => x.PetModule);
 const routes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'account', loadChildren: accountModule },
-    { path: 'profile', loadChildren: profileModule, canActivate: [AuthGuard] },
+    { path: 'profile', loadChildren: profileModule },
     { path: 'pet', loadChildren: petModule },
     { path: 'admin', loadChildren: adminModule, canActivate: [AuthGuard], data: { roles: [Role.Admin] } },
 

@@ -1,9 +1,9 @@
-﻿<h3 class="card-header">Verify Email</h3>
+﻿<h3 class="card-header">E-posta Adresi Onayı</h3>
 <div class="card-body">
     <div *ngIf="emailStatus == EmailStatus.Verifying">
-        Verifying...
+        Kayıt onaylanıyor...
     </div>
     <div *ngIf="emailStatus == EmailStatus.Failed">
-        Verification failed, you can also verify your account using the <a routerLink="forgot-password">forgot password</a> page.
+        Onaylama başarısız. Tekrar denemek için <a routerLink="forgot-password">şifremi unuttum</a> sayfasını kullanabilirsiniz.
     </div>
 </div>

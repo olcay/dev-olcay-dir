@@ -9,7 +9,7 @@
     </p>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="form-group">
-            <label>Eposta Adresi</label>
+            <label>E-posta Adresi</label>
             <input type="text" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
             <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                 <div *ngIf="f.email.errors.required">Eposta adresi zorunlu</div>
@@ -32,7 +32,7 @@
                 <a routerLink="../register" class="btn btn-link">Yeni Kullanıcı Kaydı</a>
             </div>
             <div class="form-group col text-right">
-                <a routerLink="../forgot-password" class="btn btn-link pr-0">Şifremi Unuttum?</a>
+                <a routerLink="../forgot-password" class="btn btn-link pr-0">Parolamı Unuttum?</a>
             </div>
         </div>
     </form>

@@ -6,7 +6,7 @@
                 <!-- Title-->
                 <h1 class="mt-4">{{ data.title }}</h1>
                 <!-- Date and time-->
-                <p>{{ data.created | date }} tarihinde {{ data.createdBy?.displayName }} tarafından eklendi</p>
+                <p>{{ data.created | date }} tarihinde <a routerLink="/profile/{{ data.createdBy?.id }}">{{ data.createdBy?.displayName }}</a> tarafından eklendi</p>
                 <br />
                 <!-- Preview image-->
                 <img class="img-fluid rounded" src="http://placekitten.com/900/400" alt="{{ data.name }}" />

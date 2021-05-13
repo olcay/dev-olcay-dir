@@ -27,7 +27,7 @@ export class DetailsComponent implements OnInit {
         this.client.getPet(this.petId)
             .subscribe(res => {
                 this.data = res;
-                this.data.isEditable = res.createdBy.id.toString() === this.account.id || this.account.role === Role.Admin;
+                this.data.isEditable = this.account != null && (res.createdBy.id.toString() === this.account.id || this.account.role === Role.Admin);
             }, error => console.error(error));
     }
 

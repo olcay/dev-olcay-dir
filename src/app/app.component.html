@@ -14,7 +14,10 @@
                         <a routerLink="/admin" routerLinkActive="active" class="nav-link">Yönetici</a>
                     </li>
                     <li *ngIf="account" class="nav-item">
-                        <a routerLink="/profile" routerLinkActive="active" class="nav-link">Profil</a>
+                        <a routerLink="/profile/{{ account.id }}" routerLinkActive="active" class="nav-link">İlanlarım</a>
+                    </li>
+                    <li *ngIf="account" class="nav-item">
+                        <a routerLink="/profile/update" routerLinkActive="active" class="nav-link">Ayarlar</a>
                     </li>
                     <li *ngIf="account" class="nav-item">
                         <a (click)="logout()" class="nav-link">Çıkış</a>
