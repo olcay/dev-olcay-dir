@@ -15,7 +15,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8 mb-5">
-            <h2>What We Do</h2>
+            <h2>Evlat Edin</h2>
             <hr />
             <p *ngIf="account">Merhaba {{account.firstName}}, seni aramızda görmek çok güzel!</p>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A deserunt neque tempore recusandae animi
@@ -24,14 +24,34 @@
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis optio neque consectetur consequatur magni
                 in nisi, natus beatae quidem quam odit commodi ducimus totam eum, alias, adipisci nesciunt voluptate.
                 Voluptatum.</p>
-            <a class="btn btn-secondary btn-lg mr-2" routerLink="/pet/add/cat">Kedi İlanı Ver</a>
-            <a class="btn btn-secondary btn-lg mr-2" routerLink="/pet/add/dog">Köpek İlanı Ver</a>
-            veya
-            <a class="btn btn-primary btn-lg" routerLink="/pet">Evlat Edin</a>
+            <a class="btn btn-primary btn-lg mr-2" routerLink="/pet/list/cat">🐈 Evlat Edin</a>
+            <a class="btn btn-primary btn-lg mr-2" routerLink="/pet/list/dog">🐕 Evlat Edin</a>
+        </div>
+        <div class="col-md-4 mb-5">
+            <img src="http://placekitten.com/380/335" alt="Kedi Evlat Edin" />
         </div>
     </div>
     <div class="row">
-
+        <div class="col-md-4 mb-5">
+            <img src="http://placekitten.com/320/335" alt="Kedi İlan Ver" />
+        </div>
+        <div class="col-md-8 mb-5">
+            <h2>İlan Ver</h2>
+            <hr />
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A deserunt neque tempore recusandae animi
+                soluta quasi? Asperiores rem dolore eaque vel, porro, soluta unde debitis aliquam laboriosam. Repellat
+                explicabo, maiores!</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis optio neque consectetur consequatur magni
+                in nisi, natus beatae quidem quam odit commodi ducimus totam eum, alias, adipisci nesciunt voluptate.
+                Voluptatum.</p>
+            <a class="btn btn-secondary btn-lg mr-2" routerLink="/pet/add/cat">Kedi İlanı Ver</a>
+            <a class="btn btn-secondary btn-lg mr-2" routerLink="/pet/add/dog">Köpek İlanı Ver</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <h2>Yeni İlanlar</h2>
+        </div>
         <div *ngFor="let pet of pageOfItems" class="col-md-4 mb-5">
             <div class="card h-100">
                 <a routerLink="/pet/{{ pet.id }}">
@@ -42,11 +62,9 @@
                     <p class="card-text">{{ pet.description | slice:0:100 }}...</p>
                 </div>
                 <div class="card-footer">
-                    {{ pet.published | date }}
                     <a class="btn btn-primary" routerLink="/pet/{{ pet.id }}">Sahiplen!</a>
                 </div>
             </div>
         </div>
-
     </div>
 </div>

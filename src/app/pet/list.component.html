@@ -1,21 +1,124 @@
 <div class="row">
-
-    <div *ngFor="let pet of pageOfItems" class="col-md-4 mb-5">
-        <div class="card h-100">
-            <a routerLink="/pet/{{ pet.id }}">
-                <img class="card-img-top" src="http://placekitten.com/300/200" alt="{{ pet.title }}" />
-            </a>
-            <div class="card-body">
-                <h4 class="card-title"><a routerLink="/pet/{{ pet.id }}">{{ pet.title }}</a></h4>
-                <p class="card-text">{{ pet.description | slice:0:100 }}...</p>
+    <div class="col-lg-3">
+        <div class="list-group">
+            <a class="list-group-item" [class.active]="petType.value.toLowerCase() == searchParams.petType"
+                routerLink="/pet/list/{{ petType.value | lowercase }}" *ngFor="let petType of data.petTypes">{{
+                petType.text }} İlanları</a>
+        </div>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="form-row mt-3">
+                <div class="form-group col">
+                    <label>Şehri</label>
+                    <select formControlName="cityId" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.cityId.errors }">
+                        <option value="0">-</option>
+                        <option *ngFor="let city of data.cities" [value]="city.value"
+                            [selected]="city.value == f.cityId">{{ city.text }}</option>
+                    </select>
+                </div>
             </div>
-            <div class="card-footer">
-                {{ pet.published | date }}
-                <a class="btn btn-primary" routerLink="/pet/{{ pet.id }}">Sahiplen!</a>
+            <div class="form-row">
+                <div class="form-group col">
+                    <label>Irkı</label>
+                    <select formControlName="raceId" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.raceId.errors }">
+                        <option value="0">-</option>
+                        <option *ngFor="let race of data.races" [value]="race.id" [selected]="race.id == f.raceId">{{
+                            race.name }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col">
+                    <label>Cinsiyeti</label>
+                    <select formControlName="genderValue" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.genderValue.errors }">
+                        <option *ngFor="let gender of data.genders" [value]="gender.value"
+                            [selected]="gender.value == f.genderValue">{{ gender.text }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col">
+                    <label>Yaşı</label>
+                    <select formControlName="ageValue" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.ageValue.errors }">
+                        <option *ngFor="let age of data.ages" [value]="age.value" [selected]="age.value == f.ageValue">
+                            {{ age.text }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col">
+                    <label>Boyutu</label>
+                    <select formControlName="sizeValue" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.sizeValue.errors }">
+                        <option *ngFor="let size of data.sizes" [value]="size.value"
+                            [selected]="size.value == f.sizeValue">{{ size.text }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col">
+                    <label>Kimden</label>
+                    <select formControlName="fromWhereValue" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.fromWhereValue.errors }">
+                        <option *ngFor="let fromWhere of data.fromWhere" [value]="fromWhere.value"
+                            [selected]="fromWhere.value == f.fromWhereValue">{{ fromWhere.text }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col">
+                    <label>Anahtar Kelime</label>
+                    <input type="text" formControlName="term" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.term.errors }" />
+                </div>
+            </div>
+            <div class="form-group">
+                <button [disabled]="loading" class="btn btn-primary btn-block">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                    Ara
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="col-lg-9">
+        <div class="row">
+            <div class="col-9">
+                <h1 class="my-4">{{ pageTitle }} Sahiplenme İlanları</h1>
+            </div>
+            <div class="col-3 my-auto text-right">
+                <a class="btn btn-secondary" routerLink="/pet/add/{{ searchParams.petType }}">
+                    {{ pageTitle }} İlanı Ver
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div *ngIf="loading" class="col-12">
+                <span  class="spinner-border text-primary"></span>
+            </div>            
+            <div *ngFor="let pet of pageOfItems" class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    <a routerLink="/pet/{{ pet.id }}">
+                        <img class="card-img-top" src="http://placekitten.com/300/200" alt="{{ pet.title }}" />
+                    </a>
+                    <div class="card-body">
+                        <h4 class="card-title"><a routerLink="/pet/{{ pet.id }}">{{ pet.title }}</a></h4>
+                        <p class="card-text">{{ pet.description | slice:0:100 }}...</p>
+                    </div>
+                    <div class="card-footer">
+                        📅 {{ pet.published | date }}
+                        📍 {{ pet.cityText }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <pagination [itemLength]="totalCount" (changePage)="onChangePage($event)"></pagination>
             </div>
         </div>
     </div>
-
 </div>
-
-<pagination [itemLength]="totalCount" (changePage)="onChangePage($event)"></pagination>

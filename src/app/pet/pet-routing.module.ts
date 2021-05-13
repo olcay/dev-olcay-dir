@@ -11,7 +11,7 @@ const routes: Routes = [
     {
         path: '', component: LayoutComponent,
         children: [
-            { path: 'list', component: ListComponent },
+            { path: 'list/:type', component: ListComponent },
             { path: ':id', component: DetailsComponent },
             { path: 'add/:type', component: AddEditComponent, canActivate: [AuthGuard] },
             { path: 'edit/:id', component: AddEditComponent, canActivate: [AuthGuard] }
