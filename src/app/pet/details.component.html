@@ -9,7 +9,7 @@
                 <p>{{ data.created | date }} tarihinde <a routerLink="/profile/{{ data.createdBy?.id }}">{{ data.createdBy?.displayName }}</a> tarafından eklendi</p>
                 <br />
                 <!-- Preview image-->
-                <img class="img-fluid rounded" src="http://placekitten.com/900/400" alt="{{ data.name }}" />
+                <img class="img-fluid rounded" src="{{ data.selectedImage?.url }}" alt="{{ data.name }}" />
                 <br /><br />
                 <!-- Post content-->
                 <p class="lead">{{ data.description }}</p>
@@ -34,6 +34,8 @@
                                 [checked]="data.petStatus.value == 'Published'" (change)="onChangeStatus()">
                             <label class="custom-control-label" for="customSwitch1">{{ data.petStatus.text }}</label>
                         </div>
+                        <br/>
+                        <image-upload [petId]="data.id"></image-upload>
                         <br/>
                         <button routerLink="/pet/edit/{{data.id}}" class="btn btn-primary mr-2">Düzenle</button>
                         <button (click)="openModal('delete-modal')" class="btn btn-danger">Sil</button>
