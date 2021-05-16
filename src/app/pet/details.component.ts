@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Role } from '@app/_models';
 
 import { AccountService, AlertService } from '@app/_services';
-import { PetsApiClient } from '@app/_services/petsapi.client';
+import { ImageDto, PetsApiClient } from '@app/_services/petsapi.client';
 import { ModalService } from '../_modal';
 
 @Component({ templateUrl: 'details.component.html' })
@@ -35,13 +35,23 @@ export class DetailsComponent implements OnInit {
             }, error => console.error(error));
     }
 
-    onDelete() {
+    onPetDelete() {
         this.deleting = true;
 
         this.client.deletePet(this.petId)
             .subscribe(() => {
                 this.alertService.success('Pet silindi.', { keepAfterRouteChange: true });
                 this.router.navigate(['/profile']);
+            });
+    }
+
+    onImageDelete() {
+        this.deleting = true;
+
+        this.client.deleteImage(this.petId, this.data.selectedImage.id)
+            .subscribe(() => {
+                this.closeModal('delete-image-modal');
+                this.getData();
             });
     }
 
@@ -61,6 +71,10 @@ export class DetailsComponent implements OnInit {
                 this.getData();
             });
         }
+    }
+
+    displayImage(image: ImageDto) {
+        this.data.selectedImage = image;
     }
 
     openModal(id: string) {

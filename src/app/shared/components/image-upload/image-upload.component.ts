@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AlertService } from '@app/_services';
 import { FileParameter, PetsApiClient } from '@app/_services/petsapi.client';
 
@@ -9,6 +9,7 @@ import { FileParameter, PetsApiClient } from '@app/_services/petsapi.client';
 })
 export class ImageUploadComponent {
   @Input() petId: string;
+  @Output() newImageEvent = new EventEmitter();
   pending: boolean = false;
 
   constructor(private client: PetsApiClient,
@@ -26,6 +27,7 @@ export class ImageUploadComponent {
       this.client.addImage(this.petId, files).subscribe(
         (res) => {
           this.pending = false;
+          this.newImageEvent.emit();
         },
         (err) => {
           this.pending = false;

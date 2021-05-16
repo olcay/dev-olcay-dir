@@ -10,6 +10,8 @@
                 <br />
                 <!-- Preview image-->
                 <img class="img-fluid rounded" src="{{ data.selectedImage?.url }}" alt="{{ data.name }}" />
+                <img *ngFor="let image of data.images" class="img-thumbnail mr-2 mb-2" src="{{ image.thumbnailUrl }}" 
+                    alt="{{ data.name }}" (click)="displayImage(image)" />
                 <br /><br />
                 <!-- Post content-->
                 <p class="lead">{{ data.description }}</p>
@@ -35,10 +37,11 @@
                             <label class="custom-control-label" for="customSwitch1">{{ data.petStatus.text }}</label>
                         </div>
                         <br/>
-                        <image-upload [petId]="data.id"></image-upload>
+                        <image-upload [petId]="data.id" (newImageEvent)="getData()"></image-upload>
+                        <button (click)="openModal('delete-image-modal')" class="btn btn-danger ml-2 mb-2">Resim Sil</button>
                         <br/>
                         <button routerLink="/pet/edit/{{data.id}}" class="btn btn-primary mr-2">Düzenle</button>
-                        <button (click)="openModal('delete-modal')" class="btn btn-danger">Sil</button>
+                        <button (click)="openModal('delete-pet-modal')" class="btn btn-danger">Sil</button>
                     </div>
                 </div>
 
@@ -55,10 +58,23 @@
 
 </section>
 
-<jw-modal id="delete-modal">
+<jw-modal id="delete-pet-modal">
     <ng-container body>Pet kaydı silinecek. Devam etmek istediğinize emin misiniz?</ng-container>
     <ng-container submit>
-        <button type="button" (click)="onDelete()" [disabled]="deleting" class="btn btn-danger">
+        <button type="button" (click)="onPetDelete()" [disabled]="deleting" class="btn btn-danger">
+            Sil<span *ngIf="deleting">...</span>
+        </button>
+    </ng-container>
+</jw-modal>
+
+<jw-modal id="delete-image-modal">
+    <ng-container body>
+        Pet resmi silinecek. Devam etmek istediğinize emin misiniz?
+        <br/>
+        <img class="img-thumbnail" src="{{ data.selectedImage?.thumbnailUrl }}" alt="{{ data.name }}" />
+    </ng-container>
+    <ng-container submit>
+        <button type="button" (click)="onImageDelete()" [disabled]="deleting" class="btn btn-danger">
             Sil<span *ngIf="deleting">...</span>
         </button>
     </ng-container>
