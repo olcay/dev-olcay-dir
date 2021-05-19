@@ -17,6 +17,8 @@ import { HomeComponent } from './home';
 import { API_BASE_URL, PetsApiClient } from './_services/petsapi.client';
 
 import { SharedModule } from "./shared/shared.module";
+import { SidebarModule } from 'ng-sidebar';
+import { PetModule } from './pet/pet.module';
 
 @NgModule({
     imports: [
@@ -26,7 +28,9 @@ import { SharedModule } from "./shared/shared.module";
         ModalModule,
         HttpClientModule,
         AppRoutingModule,
-        SharedModule
+        SharedModule,
+        SidebarModule.forRoot(),
+        PetModule
     ],
     declarations: [
         AppComponent,

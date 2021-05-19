@@ -20,4 +20,10 @@ export class AppComponent {
     toggleNavbar() {
         this.navbarOpen = !this.navbarOpen;
     }
+
+    _opened: boolean = false;
+
+    _toggleSidebar() {
+        this._opened = !this._opened;
+    }
 }

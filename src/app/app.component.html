@@ -1,80 +1,101 @@
-﻿<div class="app-container">
-    <!-- main nav -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
-                class="navbar-brand">Petibör</a>
-            <button class="navbar-toggler" type="button" (click)="toggleNavbar()"><span
-                    class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" [ngClass]="{ 'show': navbarOpen }">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link" routerLink="/pet/list/cat">Kediler</a></li>
-                    <li class="nav-item"><a class="nav-link" routerLink="/pet/list/dog">Köpekler</a></li>
-                    <li *ngIf="account?.role === Role.Admin" class="nav-item">
-                        <a routerLink="/admin" routerLinkActive="active" class="nav-link">Yönetici</a>
-                    </li>
-                    <li *ngIf="account" class="nav-item">
-                        <a routerLink="/profile/{{ account.id }}" routerLinkActive="active" class="nav-link">İlanlarım</a>
-                    </li>
-                    <li *ngIf="account" class="nav-item">
-                        <a routerLink="/profile/update" routerLinkActive="active" class="nav-link">Ayarlar</a>
-                    </li>
-                    <li *ngIf="account" class="nav-item">
-                        <a (click)="logout()" class="nav-link">Çıkış</a>
-                    </li>
-                    <li *ngIf="!account" class="nav-item">
-                        <a routerLink="/account/login" routerLinkActive="active" class="nav-link">Giriş</a>
-                    </li>
-                </ul>
+﻿<!-- Container for sidebar(s) + page content -->
+<ng-sidebar-container style="position:absolute;">
+
+    <!-- A sidebar -->
+    <ng-sidebar [(opened)]="_opened" #sidebar>
+        <div class="bg-light p-2">
+            <div class="text-right mb-3">
+                <button class="btn btn-secondary" (click)="sidebar.close()">🗙</button>
             </div>
+            
+            <pet-search (submit)="sidebar.close()"></pet-search>
         </div>
-    </nav>
+    </ng-sidebar>
 
-    <!-- subnav router outlet -->
-    <router-outlet name="subnav"></router-outlet>
-
-    <!-- global alert -->
-    <alert></alert>
-
-    <!-- main router outlet -->
-    <router-outlet></router-outlet>
-
-    <!-- Footer-->
-    <footer class="pt-5 bg-light">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-5">
-                    <address>
-                        <strong>Hayvan Sahiplendirme Derneği</strong>
-                        <br />
-                        3481 Melrose Place
-                        <br />
-                        Beverly Hills, CA 90210
-                        <br />
-                    </address>
-                    <address>
-                        <abbr title="Phone">P:</abbr>
-                        (123) 456-7890
-                        <br />
-                        <abbr title="Email">E:</abbr>
-                        <a href="mailto:#">name@example.com</a>
-                    </address>
+    <!-- Page content -->
+    <div ng-sidebar-content>
+        <div class="app-container">
+            <!-- main nav -->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container">
+                    <button class="btn btn-secondary d-md-none" (click)="_toggleSidebar()">🔎</button>
+                    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                        class="navbar-brand">Petibör</a>
+                    <button class="navbar-toggler" type="button" (click)="toggleNavbar()"><span
+                            class="navbar-toggler-icon"></span></button>
+                    <div class="collapse navbar-collapse" [ngClass]="{ 'show': navbarOpen }">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item"><a class="nav-link" routerLink="/pet/list/cat">Kediler</a></li>
+                            <li class="nav-item"><a class="nav-link" routerLink="/pet/list/dog">Köpekler</a></li>
+                            <li *ngIf="account?.role === Role.Admin" class="nav-item">
+                                <a routerLink="/admin" routerLinkActive="active" class="nav-link">Yönetici</a>
+                            </li>
+                            <li *ngIf="account" class="nav-item">
+                                <a routerLink="/profile/{{ account.id }}" routerLinkActive="active"
+                                    class="nav-link">İlanlarım</a>
+                            </li>
+                            <li *ngIf="account" class="nav-item">
+                                <a routerLink="/profile/update" routerLinkActive="active" class="nav-link">Ayarlar</a>
+                            </li>
+                            <li *ngIf="account" class="nav-item">
+                                <a (click)="logout()" class="nav-link">Çıkış</a>
+                            </li>
+                            <li *ngIf="!account" class="nav-item">
+                                <a routerLink="/account/login" routerLinkActive="active" class="nav-link">Giriş</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="col-md-4 mb-5">
-                    <strong>Evlat Edin</strong>
-                    <br />
-                    <a routerLink="/pet/list/cat">Kedi Evlat Edin</a>
-                    <br />
-                    <a routerLink="/pet/list/dog">Köpek Evlat Edin</a>
+            </nav>
+
+            <!-- subnav router outlet -->
+            <router-outlet name="subnav"></router-outlet>
+
+            <!-- global alert -->
+            <alert></alert>
+
+            <!-- main router outlet -->
+            <router-outlet></router-outlet>
+
+            <!-- Footer-->
+            <footer class="pt-5 bg-light">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4 mb-5">
+                            <address>
+                                <strong>Hayvan Sahiplendirme Derneği</strong>
+                                <br />
+                                3481 Melrose Place
+                                <br />
+                                Beverly Hills, CA 90210
+                                <br />
+                            </address>
+                            <address>
+                                <abbr title="Phone">P:</abbr>
+                                (123) 456-7890
+                                <br />
+                                <abbr title="Email">E:</abbr>
+                                <a href="mailto:#">name@example.com</a>
+                            </address>
+                        </div>
+                        <div class="col-md-4 mb-5">
+                            <strong>Evlat Edin</strong>
+                            <br />
+                            <a routerLink="/pet/list/cat">Kedi Evlat Edin</a>
+                            <br />
+                            <a routerLink="/pet/list/dog">Köpek Evlat Edin</a>
+                        </div>
+                        <div class="col-md-4 mb-5">
+                            <strong>İlan Ver</strong>
+                            <br />
+                            <a routerLink="/pet/add/cat">Kedi Yuva Arıyor</a>
+                            <br />
+                            <a routerLink="/pet/add/dog">Köpek Yuva Arıyor</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-4 mb-5">
-                    <strong>İlan Ver</strong>
-                    <br />
-                    <a routerLink="/pet/add/cat">Kedi Yuva Arıyor</a>
-                    <br />
-                    <a routerLink="/pet/add/dog">Köpek Yuva Arıyor</a>
-                </div>
-            </div>
+            </footer>
         </div>
-    </footer>
-</div>
+    </div>
+
+</ng-sidebar-container>
