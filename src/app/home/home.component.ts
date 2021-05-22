@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit {
 
     getData() {
         // get items for total count
-        this.client.getPets(null, 0, 1, 3, null, 'id,title,description,images', PetType.All, 0, 0, PetAge.None, Gender.None, Size.None, FromWhere.None)
+        this.client.getPets(null, 0, 1, 3, null, 'id,title,description,published,cityText,images', PetType.All, 0, 0, PetAge.None, Gender.None, Size.None, FromWhere.None)
             .subscribe(res => {
                 this.pageOfItems = res.value;
             }, error => console.error(error));

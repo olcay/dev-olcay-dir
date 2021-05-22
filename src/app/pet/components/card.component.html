@@ -1,0 +1,13 @@
+<div class="card h-100">
+    <a routerLink="/pet/{{ pet.id }}">
+        <img class="card-img-top" src="{{ pet | thumbnail }}" alt="{{ pet.title }}" />
+    </a>
+    <div class="card-body">
+        <h4 class="card-title"><a routerLink="/pet/{{ pet.id }}">{{ pet.title }}</a></h4>
+        <p class="card-text">{{ pet.description | slice:0:100 }}...</p>
+    </div>
+    <div class="card-footer">
+        📅 {{ pet.published | replaceNullDateWithText:'Yayınlanmadı' }}
+        📍 {{ pet.cityText }}
+    </div>
+</div>

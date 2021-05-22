@@ -16,7 +16,7 @@ import { AlertComponent } from './_components';
 import { HomeComponent } from './home';
 import { API_BASE_URL, PetsApiClient } from './_services/petsapi.client';
 
-import { SharedModule } from "./shared/shared.module";
+import { SharedModule } from './shared/shared.module';
 import { SidebarModule } from 'ng-sidebar';
 import { PetModule } from './pet/pet.module';
 

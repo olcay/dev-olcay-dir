@@ -7,7 +7,8 @@ import { LayoutComponent } from './layout.component';
 import { DetailsComponent } from './details.component';
 import { AddEditComponent } from './add-edit.component';
 import { ListComponent } from './list.component';
-import { SearchComponent } from './search.component';
+import { SearchComponent } from './components/search.component';
+import { CardComponent } from './components/card.component';
 import { ModalModule } from '@app/_modal';
 import { SharedModule } from '@app/shared/shared.module';
 
@@ -24,8 +25,12 @@ import { SharedModule } from '@app/shared/shared.module';
         DetailsComponent,
         AddEditComponent,
         ListComponent,
-        SearchComponent
+        SearchComponent,
+        CardComponent
     ],
-    exports: [SearchComponent]
+    exports: [
+        SearchComponent,
+        CardComponent
+    ]
 })
 export class PetModule { }

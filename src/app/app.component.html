@@ -3,7 +3,7 @@
 
     <!-- A sidebar -->
     <ng-sidebar [(opened)]="_opened" #sidebar>
-        <div class="bg-light p-2">
+        <div class="bg-light p-2" style="width: 300px;">
             <div class="text-right mb-3">
                 <button class="btn btn-secondary" (click)="sidebar.close()">🗙</button>
             </div>
@@ -61,7 +61,7 @@
             <footer class="pt-5 bg-light">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-4 mb-5">
+                        <div class="col-md-3 mb-5">
                             <address>
                                 <strong>Hayvan Sahiplendirme Derneği</strong>
                                 <br />
@@ -71,26 +71,31 @@
                                 <br />
                             </address>
                             <address>
-                                <abbr title="Phone">P:</abbr>
-                                (123) 456-7890
+                                🕿 (123) 456-7890
                                 <br />
-                                <abbr title="Email">E:</abbr>
-                                <a href="mailto:#">name@example.com</a>
+                                🖂 <a href="mailto:#">name@example.com</a>
                             </address>
                         </div>
-                        <div class="col-md-4 mb-5">
+                        <div class="col-md-3 mb-5">
                             <strong>Evlat Edin</strong>
                             <br />
                             <a routerLink="/pet/list/cat">Kedi Evlat Edin</a>
                             <br />
                             <a routerLink="/pet/list/dog">Köpek Evlat Edin</a>
                         </div>
-                        <div class="col-md-4 mb-5">
+                        <div class="col-md-3 mb-5">
                             <strong>İlan Ver</strong>
                             <br />
                             <a routerLink="/pet/add/cat">Kedi Yuva Arıyor</a>
                             <br />
                             <a routerLink="/pet/add/dog">Köpek Yuva Arıyor</a>
+                        </div>
+                        <div class="col-md-3 mb-5">
+                            <strong>Açık Kaynak</strong>
+                            <br />
+                            <a href="https://github.com/olcay/dev-olcay-dir" target="_top">Petibör App</a>
+                            <br />
+                            <a href="https://github.com/olcay/dev-olcay-dir-api" target="_top">Pet API</a>
                         </div>
                     </div>
                 </div>

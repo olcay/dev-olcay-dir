@@ -23,6 +23,9 @@ Angular 10
 ## References
 
 - [Angular 10 Boilerplate - Email Sign Up with Verification, Authentication & Forgot Password](https://jasonwatmore.com/post/2020/08/29/angular-10-boilerplate-email-sign-up-with-verification-authentication-forgot-password)
+- [Minty Bootstrap Theme](https://bootswatch.com/minty/)
+- [How to make image upload easy with Angular](https://www.freecodecamp.org/news/how-to-make-image-upload-easy-with-angular-1ed14cb2773b/)
+- [ng-sidebar](https://echeung.me/ng-sidebar/)
 
 ## To Do
 
@@ -30,5 +33,5 @@ Angular 10
 - [x] Integrate Pets API using NSwag
 - [x] Add pagination component
 - [x] Manage pets
-- [ ] Upload images
-- [ ] Messaging (Between users and feedback to admin)
+- [X] Upload images
+- [ ] Messaging

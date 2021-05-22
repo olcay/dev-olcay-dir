@@ -26,7 +26,7 @@ export class DetailsComponent implements OnInit {
                 next: (account) => {
                     this.account = account;
 
-                    this.client.getPets(null, this.id, 1, 10, null, 'id,title,description,published,cityText', PetType.All, 0, 0, PetAge.None, Gender.None, Size.None, FromWhere.None)
+                    this.client.getPets(null, this.id, 1, 10, null, 'id,title,description,published,cityText,images', PetType.All, 0, 0, PetAge.None, Gender.None, Size.None, FromWhere.None)
                         .subscribe(res => {
                             this.pets = res.value;
                         }, error => console.error(error));

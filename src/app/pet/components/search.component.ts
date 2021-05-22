@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { PetsApiClient } from '@app/_services/petsapi.client';
 import { Subscription } from 'rxjs';
 import { SearchService } from '@app/_services';
@@ -19,13 +19,11 @@ export class SearchComponent implements OnInit {
     constructor(
         private formBuilder: FormBuilder,
         private client: PetsApiClient,
-        private route: ActivatedRoute,
         private router: Router,
         private searchService: SearchService) {
-        // subscribe to home component messages
+            
         this.subscription = this.searchService.onMessage().subscribe(message => {
             this.searchParams = message;
-
             this.initForm();
         });
     }
@@ -109,7 +107,7 @@ export class SearchComponent implements OnInit {
         this.searchParams.fromWhereValue = this.form.value.fromWhereValue;
         this.searchParams.term = this.form.value.term;
 
-        this.router.navigate(['pet/list/cat'], {
+        this.router.navigate(['pet/list/' + this.searchParams.petType], {
             queryParams: this.searchParams,
             queryParamsHandling: 'merge'
         });

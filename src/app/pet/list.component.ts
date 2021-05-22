@@ -19,6 +19,8 @@ export class ListComponent implements OnInit {
     fillInTheBlanks() {
         this.searchService.sendMessage(this.searchParams);
 
+        // set total count to zero to trigger onSearch
+        this.totalCount = 0;
         // get items for total count
         this.client.getPets(this.searchParams.term, 0, 0, 0, null, null,
             this.searchParams.petType,
@@ -30,6 +32,9 @@ export class ListComponent implements OnInit {
             this.searchParams.fromWhereValue)
             .subscribe(res => {
                 this.totalCount = res.pagination.totalCount;
+                if (this.totalCount == 0){
+                    this.pageOfItems = [];
+                }
             }, error => console.error(error));
     }
 
@@ -65,24 +70,26 @@ export class ListComponent implements OnInit {
     }
 
     private onSearch() {
-        this.loading = true;
-        this.client.getPets(
-            this.searchParams.term,
-            0,
-            this.searchParams.pageNumber,
-            10,
-            null,
-            'id,title,description,published,cityText,images',
-            this.searchParams.petType,
-            this.searchParams.cityId,
-            this.searchParams.raceId,
-            this.searchParams.ageValue,
-            this.searchParams.genderValue,
-            this.searchParams.sizeValue,
-            this.searchParams.fromWhereValue)
-            .subscribe(res => {
-                this.pageOfItems = res.value;
-                this.loading = false;
-            }, error => console.error(error));
+        if (this.totalCount > 0) {
+            this.loading = true;
+            this.client.getPets(
+                this.searchParams.term,
+                0,
+                this.searchParams.pageNumber,
+                10,
+                null,
+                'id,title,description,published,cityText,images',
+                this.searchParams.petType,
+                this.searchParams.cityId,
+                this.searchParams.raceId,
+                this.searchParams.ageValue,
+                this.searchParams.genderValue,
+                this.searchParams.sizeValue,
+                this.searchParams.fromWhereValue)
+                .subscribe(res => {
+                    this.pageOfItems = res.value;
+                    this.loading = false;
+                }, error => console.error(error));
+        }
     }
 }

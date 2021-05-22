@@ -6,12 +6,14 @@ import { ProfileRoutingModule } from './profile-routing.module';
 import { LayoutComponent } from './layout.component';
 import { DetailsComponent } from './details.component';
 import { UpdateComponent } from './update.component';
+import { PetModule } from '@app/pet/pet.module';
 
 @NgModule({
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        ProfileRoutingModule
+        ProfileRoutingModule,
+        PetModule
     ],
     declarations: [
         LayoutComponent,

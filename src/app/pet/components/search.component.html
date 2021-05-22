@@ -3,7 +3,7 @@
         routerLink="/pet/list/{{ petType.value | lowercase }}" *ngFor="let petType of data.petTypes">{{
         petType.text }} İlanları</a>
 </div>
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
+<form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="searchParams.petType">
     <div class="form-row mt-3">
         <div class="form-group col">
             <label>Şehri</label>

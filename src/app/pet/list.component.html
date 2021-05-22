@@ -18,19 +18,7 @@
                 <span class="spinner-border text-primary"></span>
             </div>            
             <div *ngFor="let pet of pageOfItems" class="col-lg-4 col-md-6 mb-4">
-                <div class="card h-100">
-                    <a routerLink="/pet/{{ pet.id }}">
-                        <img class="card-img-top" src="{{ pet.images[0]?.thumbnailUrl }}" alt="{{ pet.title }}" />
-                    </a>
-                    <div class="card-body">
-                        <h4 class="card-title"><a routerLink="/pet/{{ pet.id }}">{{ pet.title }}</a></h4>
-                        <p class="card-text">{{ pet.description | slice:0:100 }}...</p>
-                    </div>
-                    <div class="card-footer">
-                        📅 {{ pet.published | date }}
-                        📍 {{ pet.cityText }}
-                    </div>
-                </div>
+                <pet-card [pet]="pet"></pet-card>
             </div>
         </div>
 
