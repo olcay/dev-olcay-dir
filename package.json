@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "deploy": "ng build --prod --base-href=https://dir.olcay.dev",
+    "deploy": "ng build --prod --base-href=https://pet.olcay.dev",
     "update": "cd src/app/_services/& nswag.cmd run /runtime:NetCore31"
   },
   "private": true,
