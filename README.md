@@ -1,4 +1,4 @@
-# pet.olcay.dev
+# pet.olcay.dev [![Website pet.olcay.dev](https://img.shields.io/website-up-down-green-red/https/pet.olcay.dev.svg)](https://pet.olcay.dev/)
 
 Angular 10
 
@@ -16,7 +16,7 @@ Angular 10
 
 1. Install all required npm packages by running `npm install` from the command line in the project root folder (where the package.json is located).
 
-1. Start the api. For details about the api see <https://github.com/olcay/dev-olcay-dir-api>.
+1. Start the api. For details about the api see <https://github.com/olcay/pet-olcay-dev-api>.
 
 1. Start the application by running `npm start` from the command line in the project root folder, this will launch a browser displaying the application.
 

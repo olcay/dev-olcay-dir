@@ -1,6 +1,6 @@
 {
-  "name": "dev-olcay-dir",
-  "version": "0.0.0",
+  "name": "pet-olcay-dev",
+  "version": "0.1.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --open",

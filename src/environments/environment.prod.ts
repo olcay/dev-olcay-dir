@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://dev-olcay-dir-api.herokuapp.com'
+  apiUrl: 'https://pet-olcay-dev-api.herokuapp.com'
 };
